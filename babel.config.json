@@ -1,0 +1,14 @@
+// babel.config.json
+
+// tells webpack when we transpile, do it with these libraries
+{
+  "presets": [ //this MUST be written with double quotes
+    [
+      "@babel/env",
+      {
+        "useBuiltIns": "usage",
+        "corejs": "3"
+      }
+    ]
+  ]
+}
