@@ -7,6 +7,7 @@ As a game, the basic win condition will be reaaching a specific location on a le
 Gear Game has several variations as outlined below.
 
 FUNCTIONALITY & MVPs
+
 - Within Gear Game, players will be able to:
 	- Start, pause, and reset the current playable level
 	- Move across the face of a gear using directional keyboard input fixed to the viewport
@@ -18,15 +19,18 @@ FUNCTIONALITY & MVPs
 	- A production README
 
 WIREFRAMES
-![image](URL)
+
+[[URL](https://wireframe.cc/e6LSUC)](https://wireframe.cc/e6LSUC)
 
 TECHNOLOGIES, LIBRARIES, AND APIs
+
 This project will be implemented with the following technologies:
 - The `Canvas API` to render the game board
 - `Webpack` and `Babel` to bundle and transpile the source JavaScript code
 - `npm` to manage project dependencies
 
 IMPLEMENTATION TIMELINE
+
 - Friday & Weekend: Setup project, including getting webpack up and running. Get canvas to show up on screen, familiarity with Canvas API. Create `Player` and `Gear` classes. Adding basic sprites for visual appeal.
 - Monday: Implement core functionality and underlying logic of Gear Game - player movement, gear movement, and periodicity to gear movement if time allows.
 - Tuesday: Implement gear traversal and collision detection, and user controls.
@@ -34,6 +38,7 @@ IMPLEMENTATION TIMELINE
 - Thursday Morning: Deploy to Github pages and initial community demos.
 
 BONUS FEATURES
+
 There are many potential spin-offs (badum-tsh) for this project, including:
 - Gear variations
 	- Gears with differing radii
@@ -63,6 +68,7 @@ There are many potential spin-offs (badum-tsh) for this project, including:
 
 
 VERY BONUS FEATURES
+
 - "Turn-based" aspect variation, gears and enemies only move with each gear traversal done by the player ("gear time" progresses only if player changes gear position)
 - A viewport fixed to the player's current gear, with all other gears revolving around the current gear
 - Time rewinding
