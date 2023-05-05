@@ -1,4 +1,5 @@
 BACKGROUND
+
 Gear Game is a top-down 2D game whose core functionality revolves around gears. Using keyboard input, the player can navigate a main character through a world of interconnected (or disconnected) gears, each with linear paths on their faces. Traversal from one gear to another adjacent gear will only be possible if the paths connect at the point where the gears touch.
 
 As a game, the basic win condition will be reaaching a specific location on a level, or collecting items from specific locations before moving to a desired location.
