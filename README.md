@@ -20,7 +20,7 @@ FUNCTIONALITY & MVPs
 
 WIREFRAMES
 
-[[URL](https://wireframe.cc/e6LSUC)](https://wireframe.cc/e6LSUC)
+![[URL](https://wireframe.cc/e6LSUC)](https://wireframe.cc/e6LSUC)
 
 TECHNOLOGIES, LIBRARIES, AND APIs
 
