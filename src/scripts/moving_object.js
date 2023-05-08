@@ -11,7 +11,7 @@ class MovingObject{
 
 		this.pos ||= [Game.DIM_X * Math.random(),Game.DIM_Y * Math.random()];
 		this.vel ||= [Math.random() - 0.5, Math.random() - 0.5]
-		// this.vel ||= [0,0]
+		// this.game // Must be passed in
 		this.radius ||= 40;
 		this.color ||= MovingObject.COLOR;
 

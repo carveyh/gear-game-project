@@ -20,6 +20,10 @@ class Game{
 		// Player class
 		this.player = new Player({game: this});
 		// this.addGenericObj();
+
+		// Images
+		this.gearShiny = new Image();
+		this.gearShiny.src = './images/gear_shiny.png';
 	}
 
 	static DIM_X = 960;
@@ -44,15 +48,17 @@ class Game{
 		let gear = new Gear({
 			pos: [Game.DIM_X / 2, Game.DIM_Y / 2],
 			vel: [0,0],
+			radius: 100,
 			game: this,
 			counterClockwise: false,
-			timeBufferThreshold: 60,
-			timeBufferStep: 30,
+			timeBufferThreshold: 2,
+			timeBufferStep: 2,
 			currentTimeBuffer: 0,
 			vertices: [0, 180], 
 			currentAngle: 0,
-			rotationSpeed: 2,
-			platformWidth: 30
+			rotationVel: 0.1,
+			platformWidth: 15,
+			vertices: [0, 90]
 		});
 		
 		this.gears.push(gear);
