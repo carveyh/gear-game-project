@@ -58,7 +58,7 @@ class Game{
 			currentAngle: 0,
 			rotationVel: 0.1,
 			platformWidth: 15,
-			vertices: [0, 90]
+			vertices: [45, 90]
 		});
 		
 		this.gears.push(gear);

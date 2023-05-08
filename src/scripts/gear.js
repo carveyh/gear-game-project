@@ -38,74 +38,69 @@ class Gear extends MovingObject{
 	}
 
 	draw(ctx){
+
+		// //Apply translation and rotation to canvas origin
+		ctx.save();
+		ctx.translate(this.pos[0], this.pos[1]);
+		ctx.rotate(Util.radians(this.currentAngle));
+
+		// //Gear itself - the canvas shape
+		ctx.beginPath();
+		ctx.fillStyle = this.color;
+		ctx.arc(0,0,this.radius,0,2*Math.PI,false);
+		ctx.fill();
+		ctx.closePath();
+
+		// //Gear - image file
+		ctx.drawImage(this.game.gearShiny, 0,0, 291, 291, this.radius * -1, this.radius * -1, this.radius * 2, this.radius * 2)
+		ctx.drawImage(
+			this.game.gearShiny, 
+			0,
+			0, 
+			291, // original image width
+			291, // original image height
+			(this.radius + 5) * -1, 
+			(this.radius + 5) * -1, 
+			(this.radius + 5) * 2, 
+			(this.radius + 5) * 2
+		);
+
+		// //Draw each path
 		this.vertices.forEach(vertex => {
 			this.drawVertex(vertex, ctx);
 		})
+
+		// //Revert translation and rotation to canvas origin
+		ctx.restore();
 	}
 
 
 
 	drawVertex(degrees, ctx){
-		ctx.save();
-		ctx.translate(this.pos[0], this.pos[1]);
-		ctx.rotate(Util.radians(this.currentAngle));
 
-		// Gear itself - the canvas shape
-		// ctx.beginPath();
-		// ctx.fillStyle = this.color;
-		// ctx.arc(0,0,this.radius,0,2*Math.PI,false);
-		// ctx.fill();
-		// ctx.closePath();
-
-		// Gear - image file
-		// ctx.drawImage(this.game.gearShiny, 0,0, 291, 291, this.radius * -1, this.radius * -1, this.radius * 2, this.radius * 2)
-		// ctx.drawImage(
-		// 	this.game.gearShiny, 
-		// 	0,
-		// 	0, 
-		// 	291, // original image width
-		// 	291, // original image height
-		// 	(this.radius + 5) * -1, 
-		// 	(this.radius + 5) * -1, 
-		// 	(this.radius + 5) * 2, 
-		// 	(this.radius + 5) * 2
-		// );
-
-		// Linear path entry point
-		// ctx.beginPath();
-		// ctx.strokeStyle = "white";
-		// ctx.fillStyle = "blue";
-		// ctx.arc(0, this.radius * -1, 5, 0, 2 * Math.PI, false);
-		// ctx.fill();
-		// ctx.stroke();
-		// ctx.closePath();
-		// this.displayCoordsOfPos(ctx,(0, this.radius * -1));
+		let exitLocation = Util.scaledVectorDegrees(degrees, this.radius);
 
 		// Linear path exit point
 		ctx.beginPath();
-		ctx.strokeStyle = "white";
-		ctx.fillStyle = "green";
-		ctx.arc(0, this.radius, 5, 0, 2 * Math.PI, false);
+		ctx.strokeStyle = "none";
+		ctx.lineWidth = 1;
+		ctx.fillStyle = "rgb(0,255,0)";
+		// ctx.arc(0, this.radius, this.platformWidth / 2, 0, 2 * Math.PI, false);
+		ctx.arc(exitLocation[0], exitLocation[1], this.platformWidth / 2, 0, 2 * Math.PI, false);
 		ctx.fill();
 		ctx.stroke();
 		ctx.closePath();
 		
 		// Linear path
 		ctx.beginPath();
-		// ctx.moveTo(0, this.radius * -1);
 		ctx.moveTo(0, 0);
 
-		// BUG: This returns NaN, Nan!
-		let exitLocation = Util.scaledVectorDegrees(degrees, this.radius);
-		// console.log(`good ol logs ${degrees}`)
-		// console.log(`good ol logs ${exitLocation}`)
 		ctx.lineTo(exitLocation[0], exitLocation[1]);
 		ctx.lineWidth = this.platformWidth;
 		ctx.strokeStyle = "rgb(0,255,0)";
 		ctx.stroke();
 		ctx.closePath();
 
-		ctx.restore();
 	}
 
 	customMove(timeDelta){
