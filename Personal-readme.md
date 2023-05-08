@@ -29,7 +29,9 @@ Sources:
 
 - Math.min(a, b) could be useful to ensure "snapping" of gears to ensure proper bridging of paths, in additional to explicitly defining tolerances. Discovery: https://developer.mozilla.org/en-US/docs/Web/API/window/requestAnimationFrame 
 
-- Refresher on gear trigonometry. Source: https://www.youtube.com/watch?v=oKpedwnJQVk
+- Rotating Coordinate Systems. Source: https://www.youtube.com/watch?v=-HcDl_gyeMs
+
+- [UNUSED] Refresher on gear trigonometry. Source: https://www.youtube.com/watch?v=oKpedwnJQVk
 
 - Gear icon. Source: https://www.freeiconspng.com/images/gear-icon
 

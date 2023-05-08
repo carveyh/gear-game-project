@@ -1,6 +1,11 @@
-@import "./styles/example.scss";
+@import "./styles/canvas.scss";
 
-#main {
-	color: $color;
+#game-canvas {
+	border: $border-style;
+}
 
+#all-container {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-around;
 }
