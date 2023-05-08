@@ -43,15 +43,16 @@ class Game{
 	addGear(){
 		let gear = new Gear({
 			pos: [Game.DIM_X / 2, Game.DIM_Y / 2],
+			vel: [0,0],
+			game: this,
 			counterClockwise: false,
-			timeBufferLimit: 60,
-			timeBufferStep: 1,
+			timeBufferThreshold: 60,
+			timeBufferStep: 30,
 			currentTimeBuffer: 0,
 			vertices: [0, 180], 
 			currentAngle: 0,
-			platformWidth: 30,
-			vel: [0,0],
-			game: this
+			rotationSpeed: 2,
+			platformWidth: 30
 		});
 		
 		this.gears.push(gear);
@@ -74,7 +75,7 @@ class Game{
 		ctx.closePath();
 		// ctx.drawImage(this.background,0,0, Game.DIM_X, Game.DIM_Y);
 		
-		console.log(this.allObjects())
+		// console.log(this.allObjects())
 		this.allObjects().forEach(obj => {
 			obj.draw(ctx);
 		});

@@ -6,11 +6,11 @@ class Gear extends MovingObject{
 	constructor(options){
 		super(options);
 		this.counterClockwise = options.counterClockwise;
-		this.timeBufferLimit = options.timeBufferLimit;
+		this.timeBufferThreshold = options.timeBufferThreshold;
 		this.timeBufferStep = options.timeBufferStep;
 		this.currentTimeBuffer = options.currentTimeBuffer;
 		this.vertices = options.vertices; //array of degrees
-		this.currentAngle = options.currentAngle;
+		this.currentAngle = options.currentAngle; //current rotation degree
 		this.rotationSpeed = options.rotationSpeed;
 		this.platformWidth = options.platformWidth;
 		this.connectedGears ||= []; //graph structure of connected gears
@@ -79,10 +79,15 @@ class Gear extends MovingObject{
 		ctx.restore();
 	}
 
-	customMove(){
-		let rotationVariation = 1;
-		(this.game.gears.indexOf(this) % 2 === 0) ? rotationVariation = 1 : rotationVariation = -1;
-		this.currentAngle += this.rotationSpeed * rotationVariation;
+	customMove(timeDelta){
+		// Stutter step
+		this.currentTimeBuffer += this.timeBufferStep;
+		if(this.currentTimeBuffer % this.timeBufferThreshold === 0){
+			let rotationDirection = 1;
+			this.counterClockwise ? rotationDirection = -1 : rotationDirection = 1;
+			this.currentAngle += this.rotationSpeed * rotationDirection * timeDelta;
+
+		}
 	}
 }
 

@@ -48,7 +48,7 @@ class GameView{
 
 	keyMapping(){
 		if(Object.keys(this.keyPresses).length === 0){
-			console.log("no presses atm")
+			// console.log("no presses atm")
 			this.game.player.vel = [0,0];
 			return;
 		}
@@ -56,11 +56,11 @@ class GameView{
 		// reset player velocity, then apply all input velocity modifiers
 		this.game.player.vel = [0,0]
 		Object.keys(this.keyPresses).forEach(key => {
-			console.log(Object.keys(this.keyPresses))
+			// console.log(Object.keys(this.keyPresses))
 			if(GameView.WASD_MOVES[key]){
 				this.game.player.updateSpeed(GameView.WASD_MOVES[key]);
 			}
-			
+
 			if(key === ' '){
 				// this.game.ship.fireBullet();
 			}

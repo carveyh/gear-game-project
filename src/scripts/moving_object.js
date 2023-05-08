@@ -14,6 +14,10 @@ class MovingObject{
 		// this.vel ||= [0,0]
 		this.radius ||= 40;
 		this.color ||= MovingObject.COLOR;
+
+		// Testing of testing converting position on regular
+		// coordinate system to a translated rotated system:
+		console.log(Util.translatedAndRotatedPos([3,1],[4,3],45));
 	}
 
 	static COLOR = "gray";
@@ -50,7 +54,7 @@ class MovingObject{
 	}
 
 	isCollideWith(otherObject){
-		
+
 	}
 
 	move(timeDelta){
