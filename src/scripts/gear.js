@@ -50,9 +50,6 @@ class Gear extends MovingObject{
 		// //Gear - image file
 		this.drawGearImage(ctx);
 
-		// //Draw each path
-		this.drawAllVertices(ctx);
-
 		// //Draw all platforms - object representation of each path
 		this.drawAllPlatforms(ctx);
 
@@ -94,45 +91,6 @@ class Gear extends MovingObject{
 	drawPlatform(platform, ctx){
 		ctx.beginPath();
 		let exitLocation = Util.scaledVectorDegrees(platform.currentAngle, platform.radius);
-		
-		// console.log(`good ol logs platform angle: ${platform.currentAngle}`)
-		console.log(`good ol logs platform as x,y: ${exitLocation}`)
-		ctx.moveTo(0, 0);
-
-		ctx.lineTo(exitLocation[0], exitLocation[1]);
-		ctx.lineWidth = this.platformWidth;
-		// ctx.strokeStyle = "rgb(255,255,255)";
-		ctx.strokeStyle = "rgb(0,255,0)";
-		ctx.stroke();
-		ctx.closePath();
-	}
-
-	// //DO NOT USE. Draws gearface paths based on angle values in gear's vertices - NOT representative of the gearPlatform object itself.
-	// //Deprecated with actual rendering of gearPlatforms to ensure those work perfectly.
-	drawAllVertices(ctx){
-		this.vertices.forEach(vertex => {
-			this.drawVertex(vertex, ctx);
-		})
-	}
-
-	// //DO NOT USE. Draws gearface paths based on angle values in gear's vertices - NOT representative of the gearPlatform object itself.
-	// //Deprecated with actual rendering of gearPlatforms to ensure those work perfectly.
-	drawVertex(degrees, ctx){
-
-		let exitLocation = Util.scaledVectorDegrees(degrees, this.radius);
-
-		// Linear path exit point
-		ctx.beginPath();
-		ctx.strokeStyle = "none";
-		ctx.lineWidth = 1;
-		ctx.fillStyle = "rgb(0,255,0)";
-		ctx.arc(exitLocation[0], exitLocation[1], this.platformWidth / 2, 0, 2 * Math.PI, false);
-		ctx.fill();
-		ctx.stroke();
-		ctx.closePath();
-		
-		// Linear path
-		ctx.beginPath();
 		ctx.moveTo(0, 0);
 
 		ctx.lineTo(exitLocation[0], exitLocation[1]);
@@ -140,7 +98,6 @@ class Gear extends MovingObject{
 		ctx.strokeStyle = "rgb(0,255,0)";
 		ctx.stroke();
 		ctx.closePath();
-
 	}
 
 	customMove(timeDelta){
@@ -151,12 +108,6 @@ class Gear extends MovingObject{
 			this.counterClockwise ? rotationDirection = -1 : rotationDirection = 1;
 			let finalAngleChange = this.rotationVel * rotationDirection * timeDelta;
 			this.currentAngle += finalAngleChange;
-			// console.log(`good ol logs - gear angle: ${this.currentAngle}`)
-			this.gearPlatforms.forEach((platform, idx) => {
-				// //We actually don't update each platform's currentAngle, they should remain as is, only the gear itself updates. That way each platform's currentAngle will be relative to feel the "change"
-				// platform.currentAngle += finalAngleChange;
-				// console.log(`good ol logs - platform ${idx} angle: ${platform.currentAngle}`)
-			})
 		}
 	}
 }
