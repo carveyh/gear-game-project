@@ -28,10 +28,11 @@ class Gear extends MovingObject{
 					pos: this.pos,
 					vel: this.vel,
 					game: this.game,
+					gear: this,
 
 					width: this.platformWidth,
 					radius: this.radius,
-					currentAngle: vertex
+					angle: vertex
 					
 				})
 			)
@@ -101,20 +102,20 @@ class Gear extends MovingObject{
 	// //Draw an individual platform
 	drawPlatform(platform, ctx){
 		ctx.beginPath();
-		// let exitLocation = Util.scaledVectorDegrees(platform.currentAngle, platform.radius);
+		// let exitLocation = Util.scaledVectorDegrees(platform.angle, platform.radius);
 		// ctx.moveTo(0, 0);
 
 		// ctx.lineTo(exitLocation[0], exitLocation[1]);
 		// ctx.lineWidth = this.platformWidth;
 		// ctx.strokeStyle = "rgb(0,255,0)";
 		// ctx.stroke();
-		ctx.rotate(Util.radians(platform.currentAngle));
+		ctx.rotate(Util.radians(platform.angle));
 		ctx.strokeStyle = "rgb(0,255,0)";
 		ctx.strokeRect(0, (platform.width / 2) * -1, platform.radius, platform.width );
 		ctx.font = "20px Arial";
 		ctx.fillStyle = "magenta";
-		ctx.fillText(`  ${platform.currentAngle}`, platform.radius, 5)
-		ctx.rotate(Util.radians(platform.currentAngle) * -1);
+		ctx.fillText(`  ${platform.angle}`, platform.radius, 5)
+		ctx.rotate(Util.radians(platform.angle) * -1);
 
 		ctx.closePath();
 	}
@@ -137,40 +138,40 @@ class Gear extends MovingObject{
 			this.counterClockwise ? rotationDirection = -1 : rotationDirection = 1;
 			finalAngleChange = this.rotationVel * rotationDirection * timeDelta; //degrees
 			this.currentAngle = (this.currentAngle + finalAngleChange) % 360; //degrees
-			// //"Stick" the player to go with you
-			if(this.player){
-				if(this.player.pos[0] === this.pos[0] && this.player.pos[1] === this.pos[1] ||
-					this.player.isMoving ){
+			// // //"Stick" the player to go with you
+			// if(this.player){
+			// 	if(this.player.pos[0] === this.pos[0] && this.player.pos[1] === this.pos[1] ||
+			// 		this.player.isMoving ){
 	
-				} else {
-					// //Rotate the player based on player's current distance from gear center.
-					// //------------------------------------------------------------------------------
-					// //First, find player's current pos relative to gear pos as origin:
-					const playerPosRelativeToGear = [this.player.pos[0] - this.pos[0], this.player.pos[1] - this.pos[1]];
-					console.log(`-------------`)
-					console.log(` `)
-					console.log(`${this.pos}`)
-					console.log(`First, find player's current pos relative to gear pos as origin: ${playerPosRelativeToGear}`);
-					// //Get the angle in radians relative to gear pos as origin:
-					const playerAngleRelToGearRadians = Math.atan(playerPosRelativeToGear[1] / playerPosRelativeToGear[0]); //radians
-					console.log(`Get the angle in radians relative to gear pos as origin: ${playerAngleRelToGearRadians}`);
-					// //Apply the same angle change made to gear as to player:
-					// //It has to be in radians.
-					const finalAngleChangeRadians = Util.radians(finalAngleChange); //radians
-					const playerNewAngleRadians = playerAngleRelToGearRadians + finalAngleChangeRadians; //radians
-					console.log(`Apply the same angle change made to gear as to player: ${playerNewAngleRadians}`);
-					console.log(`finalAngleChangeRadians ${finalAngleChangeRadians}`);
-					// //Get new player position relative to gear as origin after angle change:
-					const hypotenuse = Util.distance([0,0], playerPosRelativeToGear);
-					const playerNewPosRelativeToGear = Util.scaledVectorRadians(playerNewAngleRadians, hypotenuse);
-					console.log(`Get new player position relative to gear as origin after angle change: ${hypotenuse} | ${playerNewPosRelativeToGear} `);
-					// //Finally, translate new player position from gear origin to canvas origin:
-					const newPlayerFinalPos = [playerNewPosRelativeToGear[0] + this.pos[0], playerNewPosRelativeToGear[1] + this.pos[1]];
-					this.player.pos = newPlayerFinalPos;
-					console.log(`Finally, translate new player position from gear origin to canvas origin: ${newPlayerFinalPos}`);
+			// 	} else {
+			// 		// //Rotate the player based on player's current distance from gear center.
+			// 		// //------------------------------------------------------------------------------
+			// 		// //First, find player's current pos relative to gear pos as origin:
+			// 		const playerPosRelativeToGear = [this.player.pos[0] - this.pos[0], this.player.pos[1] - this.pos[1]];
+			// 		console.log(`-------------`)
+			// 		console.log(` `)
+			// 		console.log(`${this.pos}`)
+			// 		console.log(`First, find player's current pos relative to gear pos as origin: ${playerPosRelativeToGear}`);
+			// 		// //Get the angle in radians relative to gear pos as origin:
+			// 		const playerAngleRelToGearRadians = Math.atan(playerPosRelativeToGear[1] / playerPosRelativeToGear[0]); //radians
+			// 		console.log(`Get the angle in radians relative to gear pos as origin: ${playerAngleRelToGearRadians}`);
+			// 		// //Apply the same angle change made to gear as to player:
+			// 		// //It has to be in radians.
+			// 		const finalAngleChangeRadians = Util.radians(finalAngleChange); //radians
+			// 		const playerNewAngleRadians = playerAngleRelToGearRadians + finalAngleChangeRadians; //radians
+			// 		console.log(`Apply the same angle change made to gear as to player: ${playerNewAngleRadians}`);
+			// 		console.log(`finalAngleChangeRadians ${finalAngleChangeRadians}`);
+			// 		// //Get new player position relative to gear as origin after angle change:
+			// 		const hypotenuse = Util.distance([0,0], playerPosRelativeToGear);
+			// 		const playerNewPosRelativeToGear = Util.scaledVectorRadians(playerNewAngleRadians, hypotenuse);
+			// 		console.log(`Get new player position relative to gear as origin after angle change: ${hypotenuse} | ${playerNewPosRelativeToGear} `);
+			// 		// //Finally, translate new player position from gear origin to canvas origin:
+			// 		const newPlayerFinalPos = [playerNewPosRelativeToGear[0] + this.pos[0], playerNewPosRelativeToGear[1] + this.pos[1]];
+			// 		this.player.pos = newPlayerFinalPos;
+			// 		console.log(`Finally, translate new player position from gear origin to canvas origin: ${newPlayerFinalPos}`);
 	
-				}
-			}
+			// 	}
+			// }
 		} else {
 		}
 

@@ -10,7 +10,7 @@ class Game{
 		// Collection of enemies
 
 		// Collection of generic in-game elements (for testing)
-		this.gearPlatforms = [];
+		// this.gearPlatforms = [];
 		this.generics = [];
 		this.gears = [];
 
@@ -61,8 +61,8 @@ class Game{
 			timeBufferStep: 1,
 			currentTimeBuffer: 0, 
 			currentAngle: 0,
+			// rotationVel: 5,
 			rotationVel: 0.1,
-			// rotationVel: 0.01,
 			platformWidth: 30,
 			// vertices: [0,45,90,135,180]
 			vertices: [90,270]
@@ -87,6 +87,16 @@ class Game{
 
 	checkCollisions(){
 		// Iterate all in-game elements and check collision
+		let allPlatforms = this.getAllGearPlatforms();
+		
+	}
+
+	getAllGearPlatforms(){
+		let allPlatforms = [];
+		this.gears.forEach(gear => {
+			allPlatforms.concat(gear.gearPlatforms);
+		})
+		return allPlatforms;
 	}
 
 	isOutOfBounds(pos){

@@ -10,8 +10,9 @@ class GearPlatform extends MovingObject{
 		// pos, width, radius (=== length / 2), currentAngle
 		// this.pos
 		this.width = options.width;
-		this.currentAngle = options.currentAngle;
+		this.angle = options.angle;
 		this.radius = options.radius;
+		this.gear = options.gear;
 	}
 
 	isCollideWith(){
@@ -19,7 +20,7 @@ class GearPlatform extends MovingObject{
 	}
 
 	isCollideWithPlayer(){
-
+		
 	}
 
 

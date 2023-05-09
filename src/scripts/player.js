@@ -25,8 +25,8 @@ class Player extends MovingObject{
 
 	}
 
-	// static SPEED_MULTIPLIER = 3.5;
-	static SPEED_MULTIPLIER = 1.5;
+	static SPEED_MULTIPLIER = 3.5;
+	// static SPEED_MULTIPLIER = 1.5;
 	static COLOR = "red";
 
 	customDraw(ctx){
