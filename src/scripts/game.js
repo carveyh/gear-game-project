@@ -56,11 +56,13 @@ class Game{
 			// radius: 60,
 			game: this,
 			// counterClockwise: false,
-			timeBufferThreshold: 300,
+			// timeBufferThreshold: 300,
+			timeBufferThreshold: 150,
 			timeBufferStep: 1,
 			currentTimeBuffer: 0, 
 			currentAngle: 0,
 			rotationVel: 0.1,
+			// rotationVel: 0.01,
 			platformWidth: 30,
 			// vertices: [0,45,90,135,180]
 			vertices: [90,270]

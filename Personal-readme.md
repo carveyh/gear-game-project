@@ -23,6 +23,9 @@ Up Next:
 		+ subdivisions // e.g. split into 6 arms
 		+ startingSubDivision // e.g. start at arm 4 of 6
 		+ connectedGears[]
+
+- IDEAS:
+	- Run button, running on a gear will speed rotation of connected gear, to activate gears that slow return to "deactivated" state
 	
 Sources:
 - git branching and merging: https://stackoverflow.com/questions/4470523/create-a-branch-in-git-from-another-branch
@@ -38,3 +41,5 @@ Sources:
 - Possible tutorial reference on top-down game dev: https://youtu.be/C4_iRLlPNFc
 
 - Possible collision detection implemention / backup based on color sampling (not ideal): https://stackoverflow.com/questions/6735470/get-pixel-color-from-canvas-on-mousemove 
+
+- Inverse trig review. Source: https://www.mathsisfun.com/algebra/trig-finding-angle-right-triangle.html
