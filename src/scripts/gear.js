@@ -44,31 +44,14 @@ class Gear extends MovingObject{
 		ctx.translate(this.pos[0], this.pos[1]);
 		ctx.rotate(Util.radians(this.currentAngle));
 
-		// //Gear itself - the canvas shape
-		ctx.beginPath();
-		ctx.fillStyle = this.color;
-		ctx.arc(0,0,this.radius,0,2*Math.PI,false);
-		ctx.fill();
-		ctx.closePath();
+		// //Draw Gear itself
+		this.drawGearOutline(ctx);
 
 		// //Gear - image file
-		// ctx.drawImage(this.game.gearShiny, 0,0, 291, 291, this.radius * -1, this.radius * -1, this.radius * 2, this.radius * 2)
-		// ctx.drawImage(
-		// 	this.game.gearShiny, 
-		// 	0,
-		// 	0, 
-		// 	291, // original image width
-		// 	291, // original image height
-		// 	(this.radius + 5) * -1, 
-		// 	(this.radius + 5) * -1, 
-		// 	(this.radius + 5) * 2, 
-		// 	(this.radius + 5) * 2
-		// );
+		this.drawGearImage(ctx);
 
 		// //Draw each path
-		this.vertices.forEach(vertex => {
-			this.drawVertex(vertex, ctx);
-		})
+		this.drawAllVertices(ctx);
 
 		// //Draw all platforms - object representation of each path
 		this.drawAllPlatforms(ctx);
@@ -77,43 +60,76 @@ class Gear extends MovingObject{
 		ctx.restore();
 	}
 
-	// Visualize platforms
+	drawGearOutline(ctx){
+		// //Gear itself - the canvas shape
+		ctx.beginPath();
+		ctx.fillStyle = this.color;
+		ctx.arc(0,0,this.radius,0,2*Math.PI,false);
+		ctx.fill();
+		ctx.closePath();
+	}
+
+	drawGearImage(ctx){
+		ctx.drawImage(this.game.gearShiny, 0,0, 291, 291, this.radius * -1, this.radius * -1, this.radius * 2, this.radius * 2)
+		ctx.drawImage(
+			this.game.gearShiny, 
+			0,
+			0, 
+			291, // original image width
+			291, // original image height
+			(this.radius + 5) * -1, 
+			(this.radius + 5) * -1, 
+			(this.radius + 5) * 2, 
+			(this.radius + 5) * 2
+		);
+	}
+
+	// //Visualize platforms - draw all platforms
 	drawAllPlatforms(ctx){
 		this.gearPlatforms.forEach(platform => {
 			this.drawPlatform(platform, ctx);
 		})
 	}
-
+	// //Draw an individual platform
 	drawPlatform(platform, ctx){
 		ctx.beginPath();
 		let exitLocation = Util.scaledVectorDegrees(platform.currentAngle, platform.radius);
 		
 		// console.log(`good ol logs platform angle: ${platform.currentAngle}`)
 		console.log(`good ol logs platform as x,y: ${exitLocation}`)
-		ctx.moveTo(-5, 50);
+		ctx.moveTo(0, 0);
+
 		ctx.lineTo(exitLocation[0], exitLocation[1]);
 		ctx.lineWidth = this.platformWidth;
 		// ctx.strokeStyle = "rgb(255,255,255)";
-		ctx.strokeStyle = "black";
+		ctx.strokeStyle = "rgb(0,255,0)";
 		ctx.stroke();
 		ctx.closePath();
 	}
 
+	// //DO NOT USE. Draws gearface paths based on angle values in gear's vertices - NOT representative of the gearPlatform object itself.
+	// //Deprecated with actual rendering of gearPlatforms to ensure those work perfectly.
+	drawAllVertices(ctx){
+		this.vertices.forEach(vertex => {
+			this.drawVertex(vertex, ctx);
+		})
+	}
 
-
+	// //DO NOT USE. Draws gearface paths based on angle values in gear's vertices - NOT representative of the gearPlatform object itself.
+	// //Deprecated with actual rendering of gearPlatforms to ensure those work perfectly.
 	drawVertex(degrees, ctx){
 
 		let exitLocation = Util.scaledVectorDegrees(degrees, this.radius);
 
-		// // Linear path exit point
-		// ctx.beginPath();
-		// ctx.strokeStyle = "none";
-		// ctx.lineWidth = 1;
-		// ctx.fillStyle = "rgb(0,255,0)";
-		// ctx.arc(exitLocation[0], exitLocation[1], this.platformWidth / 2, 0, 2 * Math.PI, false);
-		// ctx.fill();
-		// ctx.stroke();
-		// ctx.closePath();
+		// Linear path exit point
+		ctx.beginPath();
+		ctx.strokeStyle = "none";
+		ctx.lineWidth = 1;
+		ctx.fillStyle = "rgb(0,255,0)";
+		ctx.arc(exitLocation[0], exitLocation[1], this.platformWidth / 2, 0, 2 * Math.PI, false);
+		ctx.fill();
+		ctx.stroke();
+		ctx.closePath();
 		
 		// Linear path
 		ctx.beginPath();
@@ -137,7 +153,8 @@ class Gear extends MovingObject{
 			this.currentAngle += finalAngleChange;
 			// console.log(`good ol logs - gear angle: ${this.currentAngle}`)
 			this.gearPlatforms.forEach((platform, idx) => {
-				platform.currentAngle += finalAngleChange;
+				// //We actually don't update each platform's currentAngle, they should remain as is, only the gear itself updates. That way each platform's currentAngle will be relative to feel the "change"
+				// platform.currentAngle += finalAngleChange;
 				// console.log(`good ol logs - platform ${idx} angle: ${platform.currentAngle}`)
 			})
 		}
