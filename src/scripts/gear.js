@@ -144,8 +144,8 @@ class Gear extends MovingObject{
 			let finalAngleChange = this.rotationVel * rotationDirection * timeDelta;
 			this.currentAngle = (this.currentAngle + finalAngleChange) % 360;
 
-			console.log(`angle change (degrees): ${finalAngleChange} | current angle: ${this.currentAngle}`);
-			if(this.currentAngle < 5) console.log(`full circle`);
+			// console.log(`angle change (degrees): ${finalAngleChange} | current angle: ${this.currentAngle}`);
+			// if(this.currentAngle < 5) console.log(`full circle`);
 			this.rotatePlayer(timeDelta, finalAngleChange);
 			// this.rotateTestPoint(timeDelta, finalAngleChange);
 	}
@@ -154,7 +154,20 @@ class Gear extends MovingObject{
 		let distFromGearCtr = Util.distance(this.testPoint, this.pos);
 		let pointStartAngle = Math.atan(this.testPoint[1], this.testPoint[0]) //this is radians
 		let pointStartAngleDegrees = Math.ceil(Util.degrees(pointStartAngle)); //this is degrees
-		console.log(`starting angle ${pointStartAngleDegrees}`)
+		// console.log(`starting angle ${pointStartAngleDegrees}`)
+	}
+
+	calcPlayerAngleRelToGearRadians(pos){
+		// What about at X === 0...?
+
+		if(pos[0] >= 0) {
+			// If positive X
+			return Math.atan(pos[1] / pos[0]);
+		} else {
+			// If negative X
+			return Math.PI + Math.atan(pos[1] / pos[0]);
+		}
+		
 	}
 
 	rotatePlayer(timeDelta, finalAngleChange){
@@ -171,9 +184,20 @@ class Gear extends MovingObject{
 				console.log(` `)
 				console.log(`${this.pos}`)
 				console.log(`First, find player's current pos relative to gear pos as origin: ${playerPosRelativeToGear}`);
+				
+				
+				// //Potential issue with this step: if either x or y is negative, Math.atan will return a negative result, meaning a negative angle.
+				// // //Get the angle in radians relative to gear pos as origin:
+				// const playerAngleRelToGearRadians = Math.atan(playerPosRelativeToGear[1] / playerPosRelativeToGear[0]); //radians
+				// console.log(`Get the angle in radians relative to gear pos as origin: ${playerAngleRelToGearRadians}`);
+				
+				// //FIX of issue:
 				// //Get the angle in radians relative to gear pos as origin:
-				const playerAngleRelToGearRadians = Math.atan(playerPosRelativeToGear[1] / playerPosRelativeToGear[0]); //radians
+				const playerAngleRelToGearRadians = this.calcPlayerAngleRelToGearRadians(playerPosRelativeToGear); //radians
 				console.log(`Get the angle in radians relative to gear pos as origin: ${playerAngleRelToGearRadians}`);
+
+
+
 				// //Apply the same angle change made to gear as to player:
 				// //It has to be in radians.
 				const finalAngleChangeRadians = Util.radians(finalAngleChange); //radians
@@ -182,6 +206,7 @@ class Gear extends MovingObject{
 				console.log(`finalAngleChangeRadians ${finalAngleChangeRadians}`);
 				// //Get new player position relative to gear as origin after angle change:
 				const hypotenuse = Util.distance([0,0], playerPosRelativeToGear);
+				// if(playerNewAngleRadians)
 				const playerNewPosRelativeToGear = Util.scaledVectorRadians(playerNewAngleRadians, hypotenuse);
 				console.log(`Get new player position relative to gear as origin after angle change: ${hypotenuse} | ${playerNewPosRelativeToGear} `);
 				// //Finally, translate new player position from gear origin to canvas origin:

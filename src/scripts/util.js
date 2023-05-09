@@ -43,10 +43,10 @@ export function scaledVectorDegrees(degrees, length){
 }
 
 
-// Return the x,y coords of a vector of length 1 given an angle in radians
+// Return the x,y coords of a vecdtor of length 1 given an angle in radians
 export function unitVector(radians) {
-	return [Math.cos(radians), Math.sin(radians)];
-	// return [Math.sin(radians), Math.cos(radians)];
+	return [(Math.cos(radians)).toFixed(3), (Math.sin(radians)).toFixed(3)];
+	// return [Math.sin(radians), Math.cos(radians)]; // THIS FREAKING BUG - RIP THANKS FOR THE SWEAT AND TEARS
 }
 
 // Return an x,y vector scaled by magnitude m

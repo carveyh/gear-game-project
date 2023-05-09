@@ -83,8 +83,9 @@ class Game{
 			timeBufferStep: 1,
 			currentTimeBuffer: 0, 
 			currentAngle: 0,
-			// rotationVel: 5,
-			rotationVel: 0.1,
+			rotationVel: 5,
+			// rotationVel: 0.1,
+			// rotationVel: 0.01,
 			platformWidth: 30,
 			// vertices: [0,45,90,135,180]
 			vertices: [60, 180, 270]
@@ -98,9 +99,13 @@ class Game{
 		// Iterate all in-game elements and check collision
 		
 		let allPlatforms = this.getAllGearPlatforms();
-		allPlatforms.forEach(platform => {
-			// console.log(platform.isCollideWithPlayer());
+		// allPlatforms.forEach(platform => {
+		// 	console.log(platform.isCollideWithPlayer());
+		// })
+		let anyCollision = allPlatforms.some(platform => {
+			return platform.isCollideWithPlayer();
 		})
+		console.log(anyCollision);
 		
 	}
 

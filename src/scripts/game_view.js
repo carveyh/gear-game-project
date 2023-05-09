@@ -19,7 +19,7 @@ class GameView{
 	};
 
 	animate(currentTime){
-		console.log(this.lastTime);
+		// console.log(this.lastTime);
 		const timeDelta = currentTime - this.lastTime;
 		this.game.step(timeDelta);
 		this.game.draw(this.ctx);
