@@ -84,7 +84,7 @@ class Game{
 			currentTimeBuffer: 0, 
 			currentAngle: 0,
 			rotationVel: 5,
-			// rotationVel: 0.1,
+			rotationVel: 0.1,
 			// rotationVel: 0.01,
 			platformWidth: 30,
 			// vertices: [0,45,90,135,180]
