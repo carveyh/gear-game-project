@@ -63,7 +63,7 @@ class GameView{
 				this.game.player.isMoving = true;
 				this.game.player.updateSpeed(GameView.WASD_MOVES[key]);
 			} else {
-				// this.game.player.isMoving = false;
+				// this.game.player.isMoving = false; 
 			}
 
 			if(key === ' '){
