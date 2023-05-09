@@ -17,7 +17,7 @@ class MovingObject{
 
 		// Testing of testing converting position on regular
 		// coordinate system to a translated rotated system:
-		console.log(Util.translatedAndRotatedPos([3,1],[4,3],45));
+		// console.log(Util.translatedAndRotatedPos([3,1],[4,3],45));
 	}
 
 	static COLOR = "gray";
@@ -40,8 +40,8 @@ class MovingObject{
 	}
 
 	displayCoords(ctx){
-		ctx.font = "10px Arial";
-		ctx.fillStyle = "yellow";
+		ctx.font = "30px Arial";
+		ctx.fillStyle = "purple";
 		ctx.fillText(`X: ${Math.floor(this.pos[0])}, Y: ${Math.floor(this.pos[1])}`,this.pos[0] + 30, this.pos[1] + 30)
 	}
 

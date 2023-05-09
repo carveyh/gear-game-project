@@ -57,7 +57,7 @@ class Game{
 			vertices: [0, 180], 
 			currentAngle: 0,
 			rotationVel: 0.1,
-			platformWidth: 15,
+			platformWidth: 50,
 			vertices: [45, 90]
 		});
 		

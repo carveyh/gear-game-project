@@ -36,3 +36,5 @@ Sources:
 - Gear icon. Source: https://www.freeiconspng.com/images/gear-icon
 
 - Possible tutorial reference on top-down game dev: https://youtu.be/C4_iRLlPNFc
+
+- Possible collision detection implemention / backup based on color sampling (not ideal): https://stackoverflow.com/questions/6735470/get-pixel-color-from-canvas-on-mousemove 

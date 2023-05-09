@@ -30,8 +30,8 @@ class Gear extends MovingObject{
 
 					width: this.platformWidth,
 					radius: this.radius,
-					currentAngle: this.vertex
-
+					currentAngle: vertex
+					
 				})
 			)
 		});
@@ -52,26 +52,51 @@ class Gear extends MovingObject{
 		ctx.closePath();
 
 		// //Gear - image file
-		ctx.drawImage(this.game.gearShiny, 0,0, 291, 291, this.radius * -1, this.radius * -1, this.radius * 2, this.radius * 2)
-		ctx.drawImage(
-			this.game.gearShiny, 
-			0,
-			0, 
-			291, // original image width
-			291, // original image height
-			(this.radius + 5) * -1, 
-			(this.radius + 5) * -1, 
-			(this.radius + 5) * 2, 
-			(this.radius + 5) * 2
-		);
+		// ctx.drawImage(this.game.gearShiny, 0,0, 291, 291, this.radius * -1, this.radius * -1, this.radius * 2, this.radius * 2)
+		// ctx.drawImage(
+		// 	this.game.gearShiny, 
+		// 	0,
+		// 	0, 
+		// 	291, // original image width
+		// 	291, // original image height
+		// 	(this.radius + 5) * -1, 
+		// 	(this.radius + 5) * -1, 
+		// 	(this.radius + 5) * 2, 
+		// 	(this.radius + 5) * 2
+		// );
 
 		// //Draw each path
 		this.vertices.forEach(vertex => {
 			this.drawVertex(vertex, ctx);
 		})
 
+		// //Draw all platforms - object representation of each path
+		this.drawAllPlatforms(ctx);
+
 		// //Revert translation and rotation to canvas origin
 		ctx.restore();
+	}
+
+	// Visualize platforms
+	drawAllPlatforms(ctx){
+		this.gearPlatforms.forEach(platform => {
+			this.drawPlatform(platform, ctx);
+		})
+	}
+
+	drawPlatform(platform, ctx){
+		ctx.beginPath();
+		let exitLocation = Util.scaledVectorDegrees(platform.currentAngle, platform.radius);
+		
+		// console.log(`good ol logs platform angle: ${platform.currentAngle}`)
+		console.log(`good ol logs platform as x,y: ${exitLocation}`)
+		ctx.moveTo(0, 0);
+		ctx.lineTo(exitLocation[0], exitLocation[1]);
+		ctx.lineWidth = this.platformWidth;
+		// ctx.strokeStyle = "rgb(255,255,255)";
+		ctx.strokeStyle = "black";
+		ctx.stroke();
+		ctx.closePath();
 	}
 
 
@@ -80,16 +105,15 @@ class Gear extends MovingObject{
 
 		let exitLocation = Util.scaledVectorDegrees(degrees, this.radius);
 
-		// Linear path exit point
-		ctx.beginPath();
-		ctx.strokeStyle = "none";
-		ctx.lineWidth = 1;
-		ctx.fillStyle = "rgb(0,255,0)";
-		// ctx.arc(0, this.radius, this.platformWidth / 2, 0, 2 * Math.PI, false);
-		ctx.arc(exitLocation[0], exitLocation[1], this.platformWidth / 2, 0, 2 * Math.PI, false);
-		ctx.fill();
-		ctx.stroke();
-		ctx.closePath();
+		// // Linear path exit point
+		// ctx.beginPath();
+		// ctx.strokeStyle = "none";
+		// ctx.lineWidth = 1;
+		// ctx.fillStyle = "rgb(0,255,0)";
+		// ctx.arc(exitLocation[0], exitLocation[1], this.platformWidth / 2, 0, 2 * Math.PI, false);
+		// ctx.fill();
+		// ctx.stroke();
+		// ctx.closePath();
 		
 		// Linear path
 		ctx.beginPath();
@@ -109,8 +133,13 @@ class Gear extends MovingObject{
 		if(this.currentTimeBuffer % this.timeBufferThreshold === 0){
 			let rotationDirection = 1;
 			this.counterClockwise ? rotationDirection = -1 : rotationDirection = 1;
-			this.currentAngle += this.rotationVel * rotationDirection * timeDelta;
-
+			let finalAngleChange = this.rotationVel * rotationDirection * timeDelta;
+			this.currentAngle += finalAngleChange;
+			// console.log(`good ol logs - gear angle: ${this.currentAngle}`)
+			this.gearPlatforms.forEach((platform, idx) => {
+				platform.currentAngle += finalAngleChange;
+				// console.log(`good ol logs - platform ${idx} angle: ${platform.currentAngle}`)
+			})
 		}
 	}
 }
