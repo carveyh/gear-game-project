@@ -16,11 +16,11 @@ class Game{
 
 		// Add generic gears
 		this.addGear();
-		// this.addGear();
-		// this.addGear();
-		// this.addGear();
-		// this.addGear();
-		// this.addGear();
+		this.addGear();
+		this.addGear();
+		this.addGear();
+		this.addGear();
+		this.addGear();
 
 		// Player class
 		this.player = new Player({game: this});
@@ -86,6 +86,7 @@ class Game{
 			timeBufferStep: 1,
 			currentTimeBuffer: 0, 
 			currentAngle: 0,
+			maxRotationVel: 3,
 			rotationVel: 5,
 			rotationVel: 0.1,
 			// rotationVel: 0.01,

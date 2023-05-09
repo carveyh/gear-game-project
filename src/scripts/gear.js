@@ -18,6 +18,8 @@ class Gear extends MovingObject{
 		this.connectedGears ||= []; //graph structure of connected gears
 		this.gearPlatforms = [];
 		this.player = null;
+		this.maxRotationVel = options.maxRotationVel;
+		this.minSpeed = 0;
 
 		let originTestCoords = Util.scaledVectorDegrees(45, this.radius);
 		// this.testPoint = [this.pos[0], this.pos[1] + this.radius];
@@ -51,7 +53,13 @@ class Gear extends MovingObject{
 		ctx.rotate(Util.radians(this.currentAngle));
 
 		// //Draw Gear itself
-		this.drawGearOutline(ctx);
+		this.drawGearSilhouette(ctx);
+
+		// //Draw outline of gear if player is standing on it
+		if(this.isPlayerOn()){
+			this.drawGearOutline(ctx);
+
+		}
 
 		// //Gear - image file
 		this.drawGearImage(ctx);
@@ -76,6 +84,15 @@ class Gear extends MovingObject{
 	}
 
 	drawGearOutline(ctx){
+		ctx.beginPath();
+		ctx.strokeStyle = "yellow";
+		ctx.lineWidth = 5;
+		ctx.arc(0,0,this.radius + 9,0,2*Math.PI,false);
+		ctx.stroke();
+		ctx.closePath();
+	}
+
+	drawGearSilhouette(ctx){
 		// //Gear itself - the canvas shape
 		ctx.beginPath();
 		ctx.fillStyle = this.color;
@@ -150,6 +167,13 @@ class Gear extends MovingObject{
 		ctx.closePath();
 	}
 
+
+
+	// //Detects if player is on a gear
+	isPlayerOn(){
+		return (Util.distance(this.game.player.pos, this.pos) < this.radius);
+	}
+
 	customMove(timeDelta){
 		// //Without any stutter step
 			let rotationDirection = 1;
@@ -159,7 +183,10 @@ class Gear extends MovingObject{
 
 			// console.log(`angle change (degrees): ${finalAngleChange} | current angle: ${this.currentAngle}`);
 			// if(this.currentAngle < 5) console.log(`full circle`);
-			this.rotatePlayer(timeDelta, finalAngleChange);
+			if(this.isPlayerOn()){
+				this.rotatePlayer(timeDelta, finalAngleChange);
+
+			}
 			// this.rotateTestPoint(timeDelta, finalAngleChange);
 	}
 
@@ -184,15 +211,15 @@ class Gear extends MovingObject{
 	}
 
 	rotatePlayer(timeDelta, finalAngleChange){
-		if(this.player && this.rotationVel > 0){
-			if(this.player.pos[0] === this.pos[0] && this.player.pos[1] === this.pos[1] ||
-				this.player.isMoving ){
+		if(this.rotationVel > 0){
+			if(this.game.player.pos[0] === this.pos[0] && this.game.player.pos[1] === this.pos[1] ||
+				this.game.player.isMoving ){
 
 			} else {
 				// //Rotate the player based on player's current distance from gear center.
 				// //------------------------------------------------------------------------------
 				// //First, find player's current pos relative to gear pos as origin:
-				const playerPosRelativeToGear = [this.player.pos[0] - this.pos[0], this.player.pos[1] - this.pos[1]];
+				const playerPosRelativeToGear = [this.game.player.pos[0] - this.pos[0], this.game.player.pos[1] - this.pos[1]];
 				// console.log(`-------------`)
 				// console.log(` `)
 				// console.log(`${this.pos}`)
@@ -224,7 +251,7 @@ class Gear extends MovingObject{
 				// console.log(`Get new player position relative to gear as origin after angle change: ${hypotenuse} | ${playerNewPosRelativeToGear} `);
 				// //Finally, translate new player position from gear origin to canvas origin:
 				const newPlayerFinalPos = [playerNewPosRelativeToGear[0] + this.pos[0], playerNewPosRelativeToGear[1] + this.pos[1]];
-				this.player.pos = newPlayerFinalPos;
+				this.game.player.pos = newPlayerFinalPos;
 				// console.log(`Finally, translate new player position from gear origin to canvas origin: ${newPlayerFinalPos}`);
 			}
 		}
