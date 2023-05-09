@@ -135,11 +135,12 @@ class Gear extends MovingObject{
 		if((this.currentTimeBuffer % this.timeBufferThreshold) < this.timeBufferThreshold * .75){
 			let rotationDirection = 1;
 			this.counterClockwise ? rotationDirection = -1 : rotationDirection = 1;
-			finalAngleChange = this.rotationVel * rotationDirection * timeDelta;
-			this.currentAngle = (this.currentAngle + finalAngleChange) % 360;
+			finalAngleChange = this.rotationVel * rotationDirection * timeDelta; //degrees
+			this.currentAngle = (this.currentAngle + finalAngleChange) % 360; //degrees
 			// //"Stick" the player to go with you
 			if(this.player){
-				if(this.player.pos[0] === this.pos[0] && this.player.pos[1] === this.pos[1] ){
+				if(this.player.pos[0] === this.pos[0] && this.player.pos[1] === this.pos[1] ||
+					this.player.isMoving ){
 	
 				} else {
 					// //Rotate the player based on player's current distance from gear center.
@@ -151,12 +152,14 @@ class Gear extends MovingObject{
 					console.log(`${this.pos}`)
 					console.log(`First, find player's current pos relative to gear pos as origin: ${playerPosRelativeToGear}`);
 					// //Get the angle in radians relative to gear pos as origin:
-					const playerAngleRelToGearRadians = Math.atan(playerPosRelativeToGear[1] / playerPosRelativeToGear[0]);
+					const playerAngleRelToGearRadians = Math.atan(playerPosRelativeToGear[1] / playerPosRelativeToGear[0]); //radians
 					console.log(`Get the angle in radians relative to gear pos as origin: ${playerAngleRelToGearRadians}`);
 					// //Apply the same angle change made to gear as to player:
-					const playerNewAngleRadians = playerAngleRelToGearRadians + finalAngleChange;
+					// //It has to be in radians.
+					const finalAngleChangeRadians = Util.radians(finalAngleChange); //radians
+					const playerNewAngleRadians = playerAngleRelToGearRadians + finalAngleChangeRadians; //radians
 					console.log(`Apply the same angle change made to gear as to player: ${playerNewAngleRadians}`);
-					console.log(`finalAngleChange ${finalAngleChange}`);
+					console.log(`finalAngleChangeRadians ${finalAngleChangeRadians}`);
 					// //Get new player position relative to gear as origin after angle change:
 					const hypotenuse = Util.distance([0,0], playerPosRelativeToGear);
 					const playerNewPosRelativeToGear = Util.scaledVectorRadians(playerNewAngleRadians, hypotenuse);

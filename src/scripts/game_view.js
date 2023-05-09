@@ -50,15 +50,19 @@ class GameView{
 		if(Object.keys(this.keyPresses).length === 0){
 			// console.log("no presses atm")
 			this.game.player.vel = [0,0];
+			this.game.player.isMoving = false;
 			return;
 		}
 
 		// reset player velocity, then apply all input velocity modifiers
 		this.game.player.vel = [0,0]
+		this.game.player.isMoving = true;
 		Object.keys(this.keyPresses).forEach(key => {
 			// console.log(Object.keys(this.keyPresses))
 			if(GameView.WASD_MOVES[key]){
 				this.game.player.updateSpeed(GameView.WASD_MOVES[key]);
+			} else {
+				// this.game.player.isMoving = false;
 			}
 
 			if(key === ' '){

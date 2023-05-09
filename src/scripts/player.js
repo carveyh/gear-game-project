@@ -18,6 +18,7 @@ class Player extends MovingObject{
 		options.radius ||= 10;
 		options.color ||= Player.COLOR;
 		super(options)
+		this.isMoving = false;
 		this.gear = spawnGear;
 		spawnGear.player = this;
 		this.speedMultiplier = Player.SPEED_MULTIPLIER;
