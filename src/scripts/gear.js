@@ -13,7 +13,8 @@ class Gear extends MovingObject{
 		this.vertices = options.vertices; //array of degrees
 		this.currentAngle = options.currentAngle; //current rotation degree
 		this.rotationVel = options.rotationVel;
-		this.platformWidth = options.platformWidth;
+		// this.platformWidth = options.platformWidth;
+		this.platformWidth = options.radius / 2;
 		this.vertices ||= [0,180]; //will have default a straight path through
 		this.connectedGears ||= []; //graph structure of connected gears
 		this.gearPlatforms = [];
@@ -87,9 +88,9 @@ class Gear extends MovingObject{
 	drawGearOutline(ctx){
 		ctx.beginPath();
 		if(this.isPlayerOn()){
-			if(this.ringGlow < this.maxRingGlow) this.ringGlow += this.ringGlowIncrement;
+			if(this.ringGlow < this.maxRingGlow) this.ringGlow += this.ringGlowIncrement * 1.1;
 		} else {
-			if(this.ringGlow > 0) this.ringGlow -= this.ringGlowIncrement * 5;
+			if(this.ringGlow > 0) this.ringGlow -= this.ringGlowIncrement * 3;
 		}
 		ctx.strokeStyle = `rgb(255,255,0,${this.ringGlow})`;
 		ctx.lineWidth = 5;
@@ -126,7 +127,7 @@ class Gear extends MovingObject{
 
 	// //Visualize platforms - draw all platforms
 	drawAllPlatforms(ctx){
-		this.drawPlatformCenter(ctx);
+		// this.drawPlatformCenter(ctx);
 		this.gearPlatforms.forEach(platform => {
 			this.drawPlatform(platform, ctx);
 		})
@@ -156,21 +157,26 @@ class Gear extends MovingObject{
 		if(platform.isCollideWithPlayer()){
 			ctx.fillStyle = "rgb(0,255,0)";
 			ctx.fillRect(0, (platform.width / 2) * -1, platform.radius, platform.width );
+			ctx.arc(0, 0, this.platformWidth / 2, 0, 2*Math.PI,false);
+			ctx.stroke();
 		} else {
 
-			ctx.strokeStyle = "rgb(0,255,0)";
-			ctx.strokeRect(0, (platform.width / 2) * -1, platform.radius, platform.width );
+			// ctx.strokeStyle = "rgb(0,255,0)";
+			ctx.fillStyle = "rgb(0,255,255,0.5)";
+			ctx.fillRect(0, (platform.width / 2) * -1, platform.radius, platform.width );
+			ctx.arc(0, 0, this.platformWidth / 2, 0, 2*Math.PI,false);
+			ctx.fill();
 		}
 
 
 
 
 		ctx.font = "20px Arial";
-		ctx.fillStyle = "magenta";
+		ctx.fillStyle = "rgb(150,150,150)";
 		ctx.fillText(`  ${platform.angle}`, platform.radius, 5)
 		ctx.rotate(Util.radians(platform.angle) * -1);
 
-		this.displayCoords(ctx);
+		// this.displayCoords(ctx);
 
 		ctx.closePath();
 	}

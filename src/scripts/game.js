@@ -61,7 +61,7 @@ class Game{
 		// let prevRad = this.gears[this.gears.length - 1].radius;
 		// console.log(`prevRad ${prevRad}`)
 		if(this.gears.length === 0){
-			newRadius = 60;
+			newRadius = 45;
 			newPos = [Game.DIM_X / 2, Game.DIM_Y - 190];
 			newCounterClockWise = false;
 		} else {
@@ -94,7 +94,7 @@ class Game{
 			// rotationVel: 0,
 			platformWidth: 30,
 			// vertices: [0,45,90,135,180]
-			vertices: [60, 180, 270]
+			vertices: [0, 60, 180, 270]
 			// vertices: [60]
 		});
 
