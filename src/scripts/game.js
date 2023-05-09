@@ -56,7 +56,7 @@ class Game{
 			// radius: 60,
 			game: this,
 			// counterClockwise: false,
-			timeBufferThreshold: 300,
+			timeBufferThreshold: 900,
 			timeBufferStep: 3,
 			currentTimeBuffer: 0, 
 			currentAngle: 0,
