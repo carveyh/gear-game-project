@@ -16,11 +16,11 @@ class Game{
 
 		// Add generic gears
 		this.addGear();
-		this.addGear();
-		this.addGear();
-		this.addGear();
-		this.addGear();
-		this.addGear();
+		// this.addGear();
+		// this.addGear();
+		// this.addGear();
+		// this.addGear();
+		// this.addGear();
 
 		// Player class
 		this.player = new Player({game: this});
@@ -58,8 +58,8 @@ class Game{
 		// let prevRad = this.gears[this.gears.length - 1].radius;
 		// console.log(`prevRad ${prevRad}`)
 		if(this.gears.length === 0){
-			// newRadius = 60;
-			newPos = [Game.DIM_X / 2, Game.DIM_Y - 90];
+			newRadius = 60;
+			newPos = [Game.DIM_X / 2, Game.DIM_Y - 190];
 			newCounterClockWise = false;
 		} else {
 			let prevGear = this.gears[this.gears.length - 1];
@@ -99,7 +99,7 @@ class Game{
 		
 		let allPlatforms = this.getAllGearPlatforms();
 		allPlatforms.forEach(platform => {
-			console.log(platform.isCollideWithPlayer());
+			// console.log(platform.isCollideWithPlayer());
 		})
 		
 	}

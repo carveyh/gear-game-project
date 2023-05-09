@@ -19,6 +19,7 @@ class GameView{
 	};
 
 	animate(currentTime){
+		console.log(this.lastTime);
 		const timeDelta = currentTime - this.lastTime;
 		this.game.step(timeDelta);
 		this.game.draw(this.ctx);
@@ -56,10 +57,10 @@ class GameView{
 
 		// reset player velocity, then apply all input velocity modifiers
 		this.game.player.vel = [0,0]
-		this.game.player.isMoving = true;
 		Object.keys(this.keyPresses).forEach(key => {
 			// console.log(Object.keys(this.keyPresses))
 			if(GameView.WASD_MOVES[key]){
+				this.game.player.isMoving = true;
 				this.game.player.updateSpeed(GameView.WASD_MOVES[key]);
 			} else {
 				// this.game.player.isMoving = false;

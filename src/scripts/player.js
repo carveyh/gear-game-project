@@ -12,7 +12,7 @@ class Player extends MovingObject{
 		
 		const spawnGear = options.game.gears[0];
 		options.pos = spawnGear.pos.slice();
-		// options.pos[1] += 0.5;
+		// options.pos[1] += 5;
 
 		options.vel ||= [0,0];
 		options.radius ||= 10;

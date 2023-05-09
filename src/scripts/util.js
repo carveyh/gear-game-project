@@ -45,7 +45,8 @@ export function scaledVectorDegrees(degrees, length){
 
 // Return the x,y coords of a vector of length 1 given an angle in radians
 export function unitVector(radians) {
-	return [Math.sin(radians), Math.cos(radians)];
+	return [Math.cos(radians), Math.sin(radians)];
+	// return [Math.sin(radians), Math.cos(radians)];
 }
 
 // Return an x,y vector scaled by magnitude m
@@ -56,6 +57,11 @@ export function scale(vec, m) {
 // Convert an angle from degrees to radians
 export function radians(degrees) {
 	return degrees * 2 * Math.PI / 360;
+}
+
+// Convert an angle from radians to degrees
+export function degrees(radians) {
+	return radians * 180 / Math.PI;
 }
 
 // Return the distance between two x,y points (absolute value)
