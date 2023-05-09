@@ -127,8 +127,19 @@ class Gear extends MovingObject{
 		// ctx.strokeStyle = "rgb(0,255,0)";
 		// ctx.stroke();
 		ctx.rotate(Util.radians(platform.angle));
-		ctx.strokeStyle = "rgb(0,255,0)";
-		ctx.strokeRect(0, (platform.width / 2) * -1, platform.radius, platform.width );
+		
+		if(platform.isCollideWithPlayer()){
+			ctx.fillStyle = "rgb(0,255,0)";
+			ctx.fillRect(0, (platform.width / 2) * -1, platform.radius, platform.width );
+		} else {
+
+			ctx.strokeStyle = "rgb(0,255,0)";
+			ctx.strokeRect(0, (platform.width / 2) * -1, platform.radius, platform.width );
+		}
+
+
+
+
 		ctx.font = "20px Arial";
 		ctx.fillStyle = "magenta";
 		ctx.fillText(`  ${platform.angle}`, platform.radius, 5)
@@ -173,7 +184,7 @@ class Gear extends MovingObject{
 	}
 
 	rotatePlayer(timeDelta, finalAngleChange){
-		if(this.player){
+		if(this.player && this.rotationVel > 0){
 			if(this.player.pos[0] === this.pos[0] && this.player.pos[1] === this.pos[1] ||
 				this.player.isMoving ){
 

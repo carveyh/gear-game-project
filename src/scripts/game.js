@@ -24,6 +24,9 @@ class Game{
 
 		// Player class
 		this.player = new Player({game: this});
+
+		this.isPaused = false;
+
 		// this.addGenericObj();
 
 		// Images
@@ -86,9 +89,11 @@ class Game{
 			rotationVel: 5,
 			rotationVel: 0.1,
 			// rotationVel: 0.01,
+			// rotationVel: 0,
 			platformWidth: 30,
 			// vertices: [0,45,90,135,180]
 			vertices: [60, 180, 270]
+			// vertices: [60]
 		});
 
 		this.gears.push(gear);

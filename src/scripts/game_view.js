@@ -20,11 +20,12 @@ class GameView{
 
 	animate(currentTime){
 		// console.log(this.lastTime);
-		const timeDelta = currentTime - this.lastTime;
-		this.game.step(timeDelta);
-		this.game.draw(this.ctx);
-		this.lastTime = currentTime;
-
+		if(!this.game.isPaused){
+			const timeDelta = currentTime - this.lastTime;
+			this.game.step(timeDelta);
+			this.game.draw(this.ctx);
+			this.lastTime = currentTime;
+		}
 		requestAnimationFrame(this.animate.bind(this));
 	}
 
@@ -67,7 +68,7 @@ class GameView{
 			}
 
 			if(key === ' '){
-				// this.game.ship.fireBullet();
+				this.game.isPaused = !this.game.isPaused;
 			}
 		})
 	}
