@@ -90,7 +90,7 @@ class Gear extends MovingObject{
 		
 		// console.log(`good ol logs platform angle: ${platform.currentAngle}`)
 		console.log(`good ol logs platform as x,y: ${exitLocation}`)
-		ctx.moveTo(0, 0);
+		ctx.moveTo(-5, 50);
 		ctx.lineTo(exitLocation[0], exitLocation[1]);
 		ctx.lineWidth = this.platformWidth;
 		// ctx.strokeStyle = "rgb(255,255,255)";
