@@ -112,20 +112,30 @@ class Gear extends MovingObject{
 		ctx.strokeRect(0, (platform.width / 2) * -1, platform.radius, platform.width );
 		ctx.font = "20px Arial";
 		ctx.fillStyle = "magenta";
-		ctx.fillText(`  ${platform.currentAngle}`, platform.radius, 0)
+		ctx.fillText(`  ${platform.currentAngle}`, platform.radius, 5)
 		ctx.rotate(Util.radians(platform.currentAngle) * -1);
 
 		ctx.closePath();
 	}
 
 	customMove(timeDelta){
-		// Stutter step
-		this.currentTimeBuffer += this.timeBufferStep;
-		if(this.currentTimeBuffer % this.timeBufferThreshold === 0){
+		// //Regular stutter step
+		// this.currentTimeBuffer += this.timeBufferStep;
+		// if(this.currentTimeBuffer % this.timeBufferThreshold === 0){
+		// 	let rotationDirection = 1;
+		// 	this.counterClockwise ? rotationDirection = -1 : rotationDirection = 1;
+		// 	let finalAngleChange = this.rotationVel * rotationDirection * timeDelta;
+		// 	this.currentAngle = (this.currentAngle + finalAngleChange) % 360;
+		// }
+
+		// //Pause stutter step
+		this.currentTimeBuffer += this.timeBufferStep * timeDelta / 20;
+		if((this.currentTimeBuffer % this.timeBufferThreshold) < this.timeBufferThreshold * .75){
 			let rotationDirection = 1;
 			this.counterClockwise ? rotationDirection = -1 : rotationDirection = 1;
 			let finalAngleChange = this.rotationVel * rotationDirection * timeDelta;
 			this.currentAngle = (this.currentAngle + finalAngleChange) % 360;
+		} else {
 		}
 	}
 }
