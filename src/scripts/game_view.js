@@ -15,7 +15,8 @@ class GameView{
 		w: [0,-1],
 		a: [-1,0],
 		s: [0,1],
-		d: [1,0]
+		d: [1,0],
+		f: [0,0]
 	};
 
 	animate(currentTime){
@@ -66,7 +67,12 @@ class GameView{
 			} else {
 				// this.game.player.isMoving = false; 
 			}
-
+			if(key === 'e'){
+				this.game.accGear();
+			}
+			if(key === 'q'){
+				this.game.decGear();
+			}
 			if(key === ' '){
 				this.game.isPaused = !this.game.isPaused;
 			}

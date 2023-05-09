@@ -19,7 +19,12 @@ class Gear extends MovingObject{
 		this.gearPlatforms = [];
 		this.player = null;
 		this.maxRotationVel = options.maxRotationVel;
+		this.rotationAcc = options.rotationAcc;
 		this.minSpeed = 0;
+
+		this.ringGlow = 0;
+		this.ringGlowIncrement = 0.03;
+		this.maxRingGlow = 1;
 
 		let originTestCoords = Util.scaledVectorDegrees(45, this.radius);
 		// this.testPoint = [this.pos[0], this.pos[1] + this.radius];
@@ -56,10 +61,7 @@ class Gear extends MovingObject{
 		this.drawGearSilhouette(ctx);
 
 		// //Draw outline of gear if player is standing on it
-		if(this.isPlayerOn()){
-			this.drawGearOutline(ctx);
-
-		}
+		this.drawGearOutline(ctx);
 
 		// //Gear - image file
 		this.drawGearImage(ctx);
@@ -76,7 +78,6 @@ class Gear extends MovingObject{
 
 	drawTestPoint(ctx){
 		ctx.beginPath();
-
 		ctx.arc(this.testPoint[0], this.testPoint[1], 4, 0, 2 * Math.PI, false);
 		ctx.fillStyle = "orange";
 		ctx.fill();
@@ -85,8 +86,15 @@ class Gear extends MovingObject{
 
 	drawGearOutline(ctx){
 		ctx.beginPath();
-		ctx.strokeStyle = "yellow";
+		if(this.isPlayerOn()){
+			if(this.ringGlow < this.maxRingGlow) this.ringGlow += this.ringGlowIncrement;
+		} else {
+			if(this.ringGlow > 0) this.ringGlow -= this.ringGlowIncrement * 5;
+		}
+		ctx.strokeStyle = `rgb(255,255,0,${this.ringGlow})`;
 		ctx.lineWidth = 5;
+		// ctx.fontStyle = "40px";
+		// ctx.fillFont("HMM", 0,0)
 		ctx.arc(0,0,this.radius + 9,0,2*Math.PI,false);
 		ctx.stroke();
 		ctx.closePath();

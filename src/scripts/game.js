@@ -87,6 +87,7 @@ class Game{
 			currentTimeBuffer: 0, 
 			currentAngle: 0,
 			maxRotationVel: 3,
+			rotationAcc: 0.2,
 			rotationVel: 5,
 			rotationVel: 0.1,
 			// rotationVel: 0.01,
