@@ -190,6 +190,10 @@ class Gear extends MovingObject{
 
 	customMove(timeDelta){
 		// //Without any stutter step
+
+		this.currentTimeBuffer += this.timeBufferStep * timeDelta / 20;
+		if((this.currentTimeBuffer % this.timeBufferThreshold) < this.timeBufferThreshold * .75){
+		
 			let rotationDirection = 1;
 			this.counterClockwise ? rotationDirection = -1 : rotationDirection = 1;
 			let finalAngleChange = this.rotationVel * rotationDirection * timeDelta;
@@ -199,9 +203,9 @@ class Gear extends MovingObject{
 			// if(this.currentAngle < 5) console.log(`full circle`);
 			if(this.isPlayerOn()){
 				this.rotatePlayer(timeDelta, finalAngleChange);
-
 			}
 			// this.rotateTestPoint(timeDelta, finalAngleChange);
+		}
 	}
 
 	rotateTestPoint(timeDelta, finalAngleChange){
