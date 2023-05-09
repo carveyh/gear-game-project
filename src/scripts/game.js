@@ -85,6 +85,7 @@ class Game{
 		this.gears.push(gear);
 	}
 
+	
 	checkCollisions(){
 		// Iterate all in-game elements and check collision
 		let allPlatforms = this.getAllGearPlatforms();
