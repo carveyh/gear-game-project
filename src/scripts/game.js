@@ -50,13 +50,35 @@ class Game{
 	}
 
 	addGear(){
+		let newPos;
+		let newRadius;
+		let newCounterClockWise;
+		// let prevGear = this.gears[this.gears.length - 1];
+		// let prevPos = this.gears[this.gears.length - 1].pos;
+		// let prevRad = this.gears[this.gears.length - 1].radius;
+		// console.log(`prevRad ${prevRad}`)
+		if(this.gears.length === 0){
+			// newRadius = 60;
+			newPos = [Game.DIM_X / 2, Game.DIM_Y - 90];
+			newCounterClockWise = false;
+		} else {
+			let prevGear = this.gears[this.gears.length - 1];
+			let prevPos = this.gears[this.gears.length - 1].pos;
+			let prevRad = this.gears[this.gears.length - 1].radius;
+			newPos = [prevPos[0], prevPos[1] - (prevRad * 2)];
+			newRadius = prevRad;
+			newCounterClockWise = !prevGear.counterClockwise;
+		}
+
 		let gear = new Gear({
-			// pos: [Game.DIM_X / 2, Game.DIM_Y - 90],
+			pos: newPos,
+			radius: newRadius,
+			counterClockwise: newCounterClockWise,
 			vel: [0,0],
 			// radius: 60,
 			game: this,
 			// counterClockwise: false,
-			// timeBufferThreshold: 300,
+			// timeBufferThreshold: 150,
 			timeBufferThreshold: 150,
 			timeBufferStep: 1,
 			currentTimeBuffer: 0, 
@@ -65,38 +87,30 @@ class Game{
 			rotationVel: 0.1,
 			platformWidth: 30,
 			// vertices: [0,45,90,135,180]
-			vertices: [90,270]
+			vertices: [60, 180, 270]
 		});
 
-		if(this.gears.length === 0){
-			gear.pos ||= [Game.DIM_X / 2, Game.DIM_Y - 90];
-			gear.radius ||= 60;
-			gear.counterClockwise = false;
-		} else {
-			let prevGear = this.gears[this.gears.length - 1];
-			let prevPos = this.gears[this.gears.length - 1].pos;
-			let prevRad = this.gears[this.gears.length - 1].radius;
-			gear.pos = [prevPos[0], prevPos[1] - (prevRad * 2)];
-			gear.radius = prevRad;
-			gear.counterClockwise = !prevGear.counterClockwise;
-		}
-
-		
 		this.gears.push(gear);
 	}
 
-	
+
 	checkCollisions(){
 		// Iterate all in-game elements and check collision
+		
 		let allPlatforms = this.getAllGearPlatforms();
+		allPlatforms.forEach(platform => {
+			console.log(platform.isCollideWithPlayer());
+		})
 		
 	}
 
 	getAllGearPlatforms(){
 		let allPlatforms = [];
 		this.gears.forEach(gear => {
-			allPlatforms.concat(gear.gearPlatforms);
+			// console.log(`hi console ${gear.width}`)
+			allPlatforms = allPlatforms.concat(gear.gearPlatforms);
 		})
+		// console.log(`hi console ${allPlatforms}`)
 		return allPlatforms;
 	}
 

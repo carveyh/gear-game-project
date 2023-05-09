@@ -5,6 +5,7 @@ import GearPlatform from "./gear_platform.js";
 class Gear extends MovingObject{
 	constructor(options){
 		super(options);
+		this.pos = options.pos;
 		this.counterClockwise = options.counterClockwise;
 		this.timeBufferThreshold = options.timeBufferThreshold;
 		this.timeBufferStep = options.timeBufferStep;
