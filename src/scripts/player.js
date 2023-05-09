@@ -6,7 +6,7 @@ import MovingObject from "./moving_object";
 class Player extends MovingObject{
 	
 	constructor(options){
-		options.pos ||= [Game.DIM_X / 3, Game.DIM_Y / 3];
+		options.pos ||= [Game.DIM_X / 4, Game.DIM_Y / 4];
 		options.vel ||= [0,0];
 		options.radius ||= 10;
 		options.color ||= Player.COLOR;

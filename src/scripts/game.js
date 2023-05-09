@@ -53,12 +53,11 @@ class Game{
 			counterClockwise: false,
 			timeBufferThreshold: 2,
 			timeBufferStep: 2,
-			currentTimeBuffer: 0,
-			vertices: [0, 180], 
+			currentTimeBuffer: 0, 
 			currentAngle: 0,
-			rotationVel: 0.1,
+			rotationVel: 0.01,
 			platformWidth: 50,
-			vertices: [45, 90]
+			vertices: [0,45,90,135,180]
 		});
 		
 		this.gears.push(gear);
