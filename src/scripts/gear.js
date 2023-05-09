@@ -137,6 +137,9 @@ class Gear extends MovingObject{
 			this.currentAngle = (this.currentAngle + finalAngleChange) % 360;
 		} else {
 		}
+
+		// //"Stick" the player to go with you
+		
 	}
 }
 

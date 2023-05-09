@@ -7,6 +7,10 @@ class Player extends MovingObject{
 	
 	constructor(options){
 		options.pos ||= [Game.DIM_X / 4, Game.DIM_Y / 4];
+
+		// //Now...we initialize player location to the first gear of the level.
+		options.pos = options.game.gears[0].pos;
+
 		options.vel ||= [0,0];
 		options.radius ||= 10;
 		options.color ||= Player.COLOR;
