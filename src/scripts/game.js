@@ -176,7 +176,7 @@ class Game{
 		// invokes moveObjects and checkCollisions
 		this.moveObjects(timeDelta);
 		this.checkCollisions();
-		console.log(this.currentGear);
+		// console.log(this.currentGear);
 	}
 
 
