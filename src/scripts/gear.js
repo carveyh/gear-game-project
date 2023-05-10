@@ -282,8 +282,8 @@ class Gear extends MovingObject{
 
 	rotatePlayer(timeDelta, finalAngleChange){
 		if(this.rotationVel > 0){
-			if(this.game.player.pos[0] === this.pos[0] && this.game.player.pos[1] === this.pos[1] ||
-				this.game.player.isMoving ){
+			// if(this.game.player.pos[0] === this.pos[0] && this.game.player.pos[1] === this.pos[1] || this.game.player.isMoving ){
+			if(this.game.player.pos[0] === this.pos[0] && this.game.player.pos[1] === this.pos[1]){
 
 			} else {
 				// //Rotate the player based on player's current distance from gear center.

@@ -96,10 +96,10 @@ class Game{
 			// rotationVel: 0,
 			platformWidth: 30,
 			// vertices: [0,45,90,135,180, 270]
-			// vertices: [0, 60, 180, 270]
+			vertices: [0, 60, 180, 270]
 			// vertices: [45, 90, 225, 270]
 			// vertices: [45, 90, 157.5, 225, 270, 337.5]
-			vertices: [0,180]
+			// vertices: [0,180]
 		});
 
 		this.gears.push(gear);
