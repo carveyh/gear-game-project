@@ -11,6 +11,11 @@ class Player extends MovingObject{
 		// //Now...we initialize player location to the same as first gear of the level.
 		const spawnGear = options.game.gears[0];
 		options.pos = spawnGear.pos.slice();
+		
+		// //Let's start player on a platform. Without this, it's actually standing on a deadzone (likely a pixel) right at the center of a gear.
+		// //BUT this looks sloppy when you first load the game...the player position is being rotated about the center point
+		options.pos[1] -= 1;
+		
 		// options.pos[1] += 5; //for testing issues with zero distance from current gear
 
 		options.vel ||= [0,0];
@@ -26,7 +31,7 @@ class Player extends MovingObject{
 
 	// static SPEED_MULTIPLIER = 3.5;
 	static SPEED_MULTIPLIER = 2;
-	static SPEED_MULTIPLIER = 1.5;
+	// static SPEED_MULTIPLIER = 1.5;
 	// static SPEED_MULTIPLIER = 0.5;
 	static COLOR = "red";
 

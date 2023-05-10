@@ -8,7 +8,8 @@ import NullPlatform from "./null_platform.js";
 class Game{
 
 	// //Revisit. `game: this`, `this` will technically refer to Game class not the active or any Game instance.
-	static NULL_GEAR = new NullGear({game: this});
+	// static NULL_GEAR = new NullGear({game: this});
+	static NULL_GEAR = new NullGear({game: null});
 
 	// //Revisit. Attempts not being read successfully by Gear constructor() as the default value.
 	// static NULL_PLATFORM = new NullPlatform({game: this, gear: this.NULL_GEAR});
@@ -105,10 +106,13 @@ class Game{
 
 
 	checkCollisions(){
+		console.log(`checking collisions`);
+
 		// Iterate all in-game elements and check collision
 		
 		// //Check if there is a current gear
-		this.checkCurrentGear();
+		this.checkCurrentGear(this.player);
+		this.currentGear.checkCurrentPlatform();
 
 		this.currentGear.gearPlatforms.forEach(platform => {
 			platform.isObjInBounds(this.player);
@@ -122,14 +126,37 @@ class Game{
 		
 	}
 
-	checkCurrentGear(){
-		for(let i = 0; i < this.gears.length; i++){
-			if(this.gears[i].isPlayerOn()){
-				this.currentGear = this.gears[i];
-				return;
-			}
-			this.currentGear = Game.NULL_GEAR;
+	checkObjOOB(){
+		// console.log(`current gear: ${this.currentGear.pos}`);
+		console.log(`current platform: ${this.currentGear.gearPlatforms[1].angle}`);
+		if(!this.currentGear.currentPlatform.isObjInBounds(this.player)){
+			this.player.unMoveAndStop();
 		}
+	}
+
+	// //Refactor to use this for any obj type
+	checkCurrentGear(obj){
+		if(obj instanceof Player){
+			let isOnAGear = false;
+
+			for(let i = 0; i < this.gears.length; i++){
+				
+				// //REFACTOR: change gear.isPlayerOn to be more dynamic and accept other obj types.
+				if(this.gears[i].isPlayerOn()){
+					this.currentGear = this.gears[i];
+					isOnAGear = true;
+					return;
+				}
+				// this.currentGear = Game.NULL_GEAR;
+			}
+			if(!isOnAGear){
+				// obj.unMoveAndStop();
+			}
+			
+		}
+
+		// //Placeholder to check for other class types
+		// if(obj instanceof OtherClass){}
 	}
 
 	draw(ctx){
@@ -166,10 +193,25 @@ class Game{
 		ctx.closePath();
 	}
 
+	// //Deprecating into (1) getAllBackgroundObjects then (2) getAllLiveObjects
+	// //Because the world spins no matter what, and living objects can then interact after world rules apply.
 	getAllObjects(){
 		return []
 		.concat(this.generics)
 		.concat(this.gears)
+		.concat([this.player])
+		;
+	}
+
+	getAllBackgroundObjects(){
+		return []
+		.concat(this.generics)
+		.concat(this.gears)
+		;
+	}
+	
+	getAllLiveObjects(){
+		return []
 		.concat([this.player])
 		;
 	}
@@ -194,10 +236,23 @@ class Game{
 		// Check OOB.
 	}
 
-
+	// //Deprecating into (1) moveBackgroundObjects then (2) moveLiveObjects
+	// //Because the world spins no matter what, and living objects can then interact after world rules apply.
 	moveObjects(timeDelta){
 		// Iterate all in-game elements, increment to new position after timeDelta
 		this.getAllObjects().forEach(obj => {
+			obj.move(timeDelta);
+		})
+	}
+
+	moveBackgroundObjects(timeDelta){
+		this.getAllBackgroundObjects().forEach(obj => {
+			obj.move(timeDelta);
+		})
+	}
+
+	moveLiveObjects(timeDelta){
+		this.getAllLiveObjects().forEach(obj => {
 			obj.move(timeDelta);
 		})
 	}
@@ -208,9 +263,22 @@ class Game{
 
 	step(timeDelta){
 		// invokes moveObjects and checkCollisions
-		this.moveObjects(timeDelta);
+
+		// //Step 1a: move background objs; Step 1b: checks collisions
+		this.moveBackgroundObjects(timeDelta);
+		// // checkCollisions() will update game.currentGear;
+		// this.checkCollisions();
+
+		// //Step 2a: move live objs; Step 2b: checks collisions
+		this.moveLiveObjects(timeDelta);
+		// // checkCollisions() will update game.currentGear;
 		this.checkCollisions();
-		// console.log(this.currentGear);
+		this.checkObjOOB();
+
+
+		// //
+		// this.moveObjects(timeDelta);
+		// this.checkCollisions();
 	}
 
 

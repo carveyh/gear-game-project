@@ -98,6 +98,7 @@ class Gear extends MovingObject{
 	drawGearOutline(ctx){
 		ctx.beginPath();
 		if(this.isPlayerOn()){
+		// if(this.game.currentGear === this){
 			if(this.ringGlow < this.maxRingGlow) this.ringGlow += this.ringGlowIncrement * 1.1;
 		} else {
 			if(this.ringGlow > 0) this.ringGlow -= this.ringGlowIncrement * 3;
@@ -165,13 +166,13 @@ class Gear extends MovingObject{
 	}
 
 	// //Draw center circle area
-	drawPlatformCenter(ctx){
-		ctx.beginPath();
-		ctx.strokeStyle = "rgb(0,255,0)";
-		ctx.arc(0, 0, this.platformWidth / 2, 0, 2*Math.PI,false);
-		ctx.stroke();
-		ctx.closePath();
-	}
+	// drawPlatformCenter(ctx){
+	// 	ctx.beginPath();
+	// 	ctx.strokeStyle = "rgb(0,255,0)";
+	// 	ctx.arc(0, 0, this.platformWidth / 2, 0, 2*Math.PI,false);
+	// 	ctx.stroke();
+	// 	ctx.closePath();
+	// }
 
 	// //Draw an individual platform
 	drawPlatform(platform, ctx){
@@ -186,6 +187,7 @@ class Gear extends MovingObject{
 		ctx.rotate(Util.radians(platform.angle));
 		
 		if((this.game.currentGear === this) && (platform.isObjInBounds(this.game.player))){
+		// if((this.game.currentGear === this)){
 		// if(platform.isObjInBounds(this.game.player)){
 			ctx.fillStyle = "rgb(0,255,0)";
 			ctx.fillRect(0, (platform.width / 2) * -1, platform.radius, platform.width );
@@ -225,13 +227,14 @@ class Gear extends MovingObject{
 	}
 
 	checkCurrentPlatform(){
+		console.log(`check current platform: all platforms: ${this.gearPlatforms}`);
 		for(let i = 0; i < this.gearPlatforms.length; i++){
 			if(this.gearPlatforms[i].isObjInBounds(this.game.player)){
 				this.currentPlatform = this.gearPlatforms[i];
 				return;
 			}
 		}
-		this.currentPlatform = Game.NULL_PLATFORM;
+		// this.currentPlatform = Game.NULL_PLATFORM;
 	}
 
 	customMove(timeDelta){
