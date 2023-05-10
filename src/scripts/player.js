@@ -30,7 +30,8 @@ class Player extends MovingObject{
 	}
 
 	// static SPEED_MULTIPLIER = 3.5;
-	static SPEED_MULTIPLIER = 2;
+	static SPEED_MULTIPLIER = 2.5;
+	// static SPEED_MULTIPLIER = 2;
 	// static SPEED_MULTIPLIER = 1.5;
 	// static SPEED_MULTIPLIER = 0.5;
 	static COLOR = "red";

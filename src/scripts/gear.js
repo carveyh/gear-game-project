@@ -7,7 +7,7 @@ import NullPlatform from "./null_platform.js";
 class Gear extends MovingObject{
 	constructor(options){
 		super(options);
-		this.pos = options.pos;
+		// this.pos = options.pos;
 		this.counterClockwise = options.counterClockwise;
 		this.timeBufferThreshold = options.timeBufferThreshold;
 		this.timeBufferStep = options.timeBufferStep;
@@ -16,7 +16,8 @@ class Gear extends MovingObject{
 		this.currentAngle = options.currentAngle; //current rotation degree
 		this.rotationVel = options.rotationVel;
 		// this.platformWidth = options.platformWidth;
-		this.platformWidth = options.radius / 2;
+		this.platformWidth = options.platformWidth;
+		this.platformWidth ||= options.radius / 2;
 		this.vertices ||= [0,180]; //will have default a straight path through
 		this.connectedGears ||= []; //graph structure of connected gears
 		this.gearPlatforms = [];
