@@ -16,7 +16,7 @@ class GameView{
 		a: [-1,0],
 		s: [0,1],
 		d: [1,0],
-		f: [0,0]
+		j: [0,0]
 	};
 
 	animate(currentTime){
@@ -51,7 +51,6 @@ class GameView{
 
 	keyMapping(){
 		if(Object.keys(this.keyPresses).length === 0){
-			// console.log("no presses atm")
 			this.game.player.vel = [0,0];
 			this.game.player.isMoving = false;
 			return;
@@ -60,13 +59,13 @@ class GameView{
 		// reset player velocity, then apply all input velocity modifiers
 		this.game.player.vel = [0,0]
 		Object.keys(this.keyPresses).forEach(key => {
-			// console.log(Object.keys(this.keyPresses))
 			if(GameView.WASD_MOVES[key]){
 				this.game.player.isMoving = true;
 				this.game.player.updateSpeed(GameView.WASD_MOVES[key]);
 			} else {
-				// this.game.player.isMoving = false; 
+				// Placeholder
 			}
+			// Consider switch / case?
 			if(key === 'e'){
 				this.game.accGear();
 			}

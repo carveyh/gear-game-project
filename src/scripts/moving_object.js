@@ -3,21 +3,19 @@ import Game from "./game.js";
 
 class MovingObject{
 	constructor(options){
+		// this.game // Must be passed in
+		this.game = options.game;
+
+		// this.pos ||= [Game.DIM_X * Math.random(),Game.DIM_Y * Math.random()];
 		this.pos = options.pos;
 		this.vel = options.vel;
-		this.game = options.game;
 		this.radius = options.radius;
 		this.color = options.color;
 
-		// this.pos ||= [Game.DIM_X * Math.random(),Game.DIM_Y * Math.random()];
 		this.vel ||= [Math.random() - 0.5, Math.random() - 0.5]
-		// this.game // Must be passed in
 		this.radius ||= 40;
 		this.color ||= MovingObject.COLOR;
 
-		// Testing of testing converting position on regular
-		// coordinate system to a translated rotated system:
-		// console.log(Util.translatedAndRotatedPos([3,1],[4,3],45));
 	}
 
 	static COLOR = "gray";
@@ -30,14 +28,14 @@ class MovingObject{
 		ctx.closePath();
 
 		// Dev helper - checking position
-		this.displayCoords(ctx);
+		// this.displayCoords(ctx);
 		
 		// Subclass specific rendering
 		this.customDraw(ctx);
 	}
-	customDraw(ctx){
 
-	}
+	// //Custom movement to be overwritten in subclass
+	customDraw(ctx){}
 
 	displayCoords(ctx){
 		ctx.font = "30px Arial";
@@ -62,11 +60,9 @@ class MovingObject{
 		this.pos[1] = this.pos[1] + (this.vel[1] * timeDelta);
 		this.customMove(timeDelta);
 	}
-	customMove(timeDelta){
 
-	}
-
-
+	// //Custom movement to be overwritten in subclass
+	customMove(timeDelta){}
 }
 
 export default MovingObject;

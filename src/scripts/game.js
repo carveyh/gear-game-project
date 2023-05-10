@@ -10,7 +10,7 @@ class Game{
 		// Collection of enemies
 
 		// Collection of generic in-game elements (for testing)
-		// this.gearPlatforms = [];
+		// this.gearPlatforms = []; //actually let each gear manage each platform...should not do this.
 		this.generics = [];
 		this.gears = [];
 
@@ -27,6 +27,8 @@ class Game{
 
 		this.isPaused = false;
 
+		this.currentGear = null;
+
 		// this.addGenericObj();
 
 		// Images
@@ -37,14 +39,6 @@ class Game{
 	static DIM_X = 960;
 	static DIM_Y = 600;
 	static BGCOLOR = "pink";
-	
-	allObjects(){
-		return []
-		.concat(this.generics)
-		.concat(this.gears)
-		.concat([this.player])
-		;
-	}
 
 	addGenericObj(){
 		this.generics.push(
@@ -56,13 +50,9 @@ class Game{
 		let newPos;
 		let newRadius;
 		let newCounterClockWise;
-		// let prevGear = this.gears[this.gears.length - 1];
-		// let prevPos = this.gears[this.gears.length - 1].pos;
-		// let prevRad = this.gears[this.gears.length - 1].radius;
-		// console.log(`prevRad ${prevRad}`)
 		if(this.gears.length === 0){
 			newRadius = 45;
-			newPos = [Game.DIM_X / 2, Game.DIM_Y - 190];
+			newPos = [Game.DIM_X / 2, Game.DIM_Y - 100];
 			newCounterClockWise = false;
 		} else {
 			let prevGear = this.gears[this.gears.length - 1];
@@ -105,24 +95,48 @@ class Game{
 	checkCollisions(){
 		// Iterate all in-game elements and check collision
 		
+		for(let i = 0; i < this.gears.length; i++){
+			if(this.gears[i].isPlayerOn()){
+				this.currentGear = this.gears[i];
+				break;
+			}
+		}
+
 		let allPlatforms = this.getAllGearPlatforms();
-		// allPlatforms.forEach(platform => {
-		// 	console.log(platform.isCollideWithPlayer());
-		// })
 		let anyCollision = allPlatforms.some(platform => {
 			return platform.isCollideWithPlayer();
 		})
-		console.log(anyCollision);
 		
+
+		
+	}
+
+	draw(ctx){
+		// Iterate all in-game elements and draw on canvas
+		ctx.beginPath();
+		ctx.fillStyle = Game.BGCOLOR;
+		ctx.fillRect(0,0,Game.DIM_X,Game.DIM_Y);
+		ctx.closePath();
+		// ctx.drawImage(this.background,0,0, Game.DIM_X, Game.DIM_Y);
+		
+		this.getAllObjects().forEach(obj => {
+			obj.draw(ctx);
+		});
+	}
+
+	getAllObjects(){
+		return []
+		.concat(this.generics)
+		.concat(this.gears)
+		.concat([this.player])
+		;
 	}
 
 	getAllGearPlatforms(){
 		let allPlatforms = [];
 		this.gears.forEach(gear => {
-			// console.log(`hi console ${gear.width}`)
 			allPlatforms = allPlatforms.concat(gear.gearPlatforms);
 		})
-		// console.log(`hi console ${allPlatforms}`)
 		return allPlatforms;
 	}
 
@@ -130,26 +144,10 @@ class Game{
 		// Check OOB.
 	}
 
-	draw(ctx){
-		// Iterate all in-game elements and draw on canvas
-		// ctx.clearRect(0,0,Game.DIM_X,Game.DIM_Y);
-		ctx.beginPath();
-		ctx.fillStyle = Game.BGCOLOR;
-		ctx.fillRect(0,0,Game.DIM_X,Game.DIM_Y);
-		ctx.closePath();
-		// ctx.drawImage(this.background,0,0, Game.DIM_X, Game.DIM_Y);
-		
-		// console.log(this.allObjects())
-		this.allObjects().forEach(obj => {
-			obj.draw(ctx);
-		});
-	}
 
 	moveObjects(timeDelta){
-		// console.log("hi")
 		// Iterate all in-game elements, increment to new position after timeDelta
-		// console.log(this.allObjects());
-		this.allObjects().forEach(obj => {
+		this.getAllObjects().forEach(obj => {
 			obj.move(timeDelta);
 		})
 	}
@@ -162,6 +160,7 @@ class Game{
 		// invokes moveObjects and checkCollisions
 		this.moveObjects(timeDelta);
 		this.checkCollisions();
+		console.log(this.currentGear);
 	}
 
 

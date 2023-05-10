@@ -73,16 +73,6 @@ class Gear extends MovingObject{
 		// //Revert translation and rotation to canvas origin
 		ctx.restore();
 
-		// //Draw test point
-		this.drawTestPoint(ctx);
-	}
-
-	drawTestPoint(ctx){
-		ctx.beginPath();
-		ctx.arc(this.testPoint[0], this.testPoint[1], 4, 0, 2 * Math.PI, false);
-		ctx.fillStyle = "orange";
-		ctx.fill();
-		ctx.closePath();
 	}
 
 	drawGearOutline(ctx){
@@ -159,11 +149,18 @@ class Gear extends MovingObject{
 			ctx.fillRect(0, (platform.width / 2) * -1, platform.radius, platform.width );
 			ctx.arc(0, 0, this.platformWidth / 2, 0, 2*Math.PI,false);
 			ctx.stroke();
+			
+			// ctx.strokeStyle = `rgb(${Math.random() * 255},${Math.random() * 255}, ${Math.random() * 255})`;
+			ctx.strokeStyle = `rgb(255,255,0)`;
+			ctx.arc(0,0,this.platformWidth / 2, 0, 2*Math.PI, false)
+			ctx.stroke();
+
 		} else {
 
 			// ctx.strokeStyle = "rgb(0,255,0)";
 			ctx.fillStyle = "rgb(0,255,255,0.5)";
 			ctx.fillRect(0, (platform.width / 2) * -1, platform.radius, platform.width );
+			ctx.fillStyle = "rgb(0,255,255,0.2)";
 			ctx.arc(0, 0, this.platformWidth / 2, 0, 2*Math.PI,false);
 			ctx.fill();
 		}
@@ -189,14 +186,28 @@ class Gear extends MovingObject{
 	}
 
 	customMove(timeDelta){
-		// //Without any stutter step
+		// //WITH stutter step and smooth periodic stop.
 
 		this.currentTimeBuffer += this.timeBufferStep * timeDelta / 20;
-		if((this.currentTimeBuffer % this.timeBufferThreshold) < this.timeBufferThreshold * .75){
-		
+
+		// //NEED TO DRY - BLOCK WITH MINOR DIFF 1of2 PARTS
+		if((this.currentTimeBuffer % this.timeBufferThreshold) < this.timeBufferThreshold * .65){
 			let rotationDirection = 1;
 			this.counterClockwise ? rotationDirection = -1 : rotationDirection = 1;
 			let finalAngleChange = this.rotationVel * rotationDirection * timeDelta;
+			this.currentAngle = (this.currentAngle + finalAngleChange) % 360;
+
+			if(this.isPlayerOn()){
+				this.rotatePlayer(timeDelta, finalAngleChange);
+			}
+		}
+
+		// //NEED TO DRY - BLOCK WITH MINOR DIFF 2of2 PARTS
+		else if((this.currentTimeBuffer % this.timeBufferThreshold) < this.timeBufferThreshold * .75){
+		
+			let rotationDirection = 1;
+			this.counterClockwise ? rotationDirection = -1 : rotationDirection = 1;
+			let finalAngleChange = this.rotationVel * rotationDirection * timeDelta / 10;
 			this.currentAngle = (this.currentAngle + finalAngleChange) % 360;
 
 			// console.log(`angle change (degrees): ${finalAngleChange} | current angle: ${this.currentAngle}`);
@@ -206,13 +217,6 @@ class Gear extends MovingObject{
 			}
 			// this.rotateTestPoint(timeDelta, finalAngleChange);
 		}
-	}
-
-	rotateTestPoint(timeDelta, finalAngleChange){
-		let distFromGearCtr = Util.distance(this.testPoint, this.pos);
-		let pointStartAngle = Math.atan(this.testPoint[1], this.testPoint[0]) //this is radians
-		let pointStartAngleDegrees = Math.ceil(Util.degrees(pointStartAngle)); //this is degrees
-		// console.log(`starting angle ${pointStartAngleDegrees}`)
 	}
 
 	calcPlayerAngleRelToGearRadians(pos){
@@ -238,21 +242,16 @@ class Gear extends MovingObject{
 				// //------------------------------------------------------------------------------
 				// //First, find player's current pos relative to gear pos as origin:
 				const playerPosRelativeToGear = [this.game.player.pos[0] - this.pos[0], this.game.player.pos[1] - this.pos[1]];
-				// console.log(`-------------`)
-				// console.log(` `)
-				// console.log(`${this.pos}`)
-				// console.log(`First, find player's current pos relative to gear pos as origin: ${playerPosRelativeToGear}`);
-				
 				
 				// //Potential issue with this step: if either x or y is negative, Math.atan will return a negative result, meaning a negative angle.
 				// // //Get the angle in radians relative to gear pos as origin:
 				// const playerAngleRelToGearRadians = Math.atan(playerPosRelativeToGear[1] / playerPosRelativeToGear[0]); //radians
-				// console.log(`Get the angle in radians relative to gear pos as origin: ${playerAngleRelToGearRadians}`);
+				
 				
 				// //FIX of issue:
 				// //Get the angle in radians relative to gear pos as origin:
 				const playerAngleRelToGearRadians = this.calcPlayerAngleRelToGearRadians(playerPosRelativeToGear); //radians
-				// console.log(`Get the angle in radians relative to gear pos as origin: ${playerAngleRelToGearRadians}`);
+				
 
 
 
@@ -260,17 +259,14 @@ class Gear extends MovingObject{
 				// //It has to be in radians.
 				const finalAngleChangeRadians = Util.radians(finalAngleChange); //radians
 				const playerNewAngleRadians = playerAngleRelToGearRadians + finalAngleChangeRadians; //radians
-				// console.log(`Apply the same angle change made to gear as to player: ${playerNewAngleRadians}`);
-				// console.log(`finalAngleChangeRadians ${finalAngleChangeRadians}`);
 				// //Get new player position relative to gear as origin after angle change:
 				const hypotenuse = Util.distance([0,0], playerPosRelativeToGear);
 				// if(playerNewAngleRadians)
 				const playerNewPosRelativeToGear = Util.scaledVectorRadians(playerNewAngleRadians, hypotenuse);
-				// console.log(`Get new player position relative to gear as origin after angle change: ${hypotenuse} | ${playerNewPosRelativeToGear} `);
 				// //Finally, translate new player position from gear origin to canvas origin:
 				const newPlayerFinalPos = [playerNewPosRelativeToGear[0] + this.pos[0], playerNewPosRelativeToGear[1] + this.pos[1]];
 				this.game.player.pos = newPlayerFinalPos;
-				// console.log(`Finally, translate new player position from gear origin to canvas origin: ${newPlayerFinalPos}`);
+				
 			}
 		}
 	}

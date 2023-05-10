@@ -12,7 +12,7 @@ class Player extends MovingObject{
 		
 		const spawnGear = options.game.gears[0];
 		options.pos = spawnGear.pos.slice();
-		// options.pos[1] += 5;
+		// options.pos[1] += 5; //for testing issues with zero distance from current gear
 
 		options.vel ||= [0,0];
 		options.radius ||= 10;
@@ -26,6 +26,7 @@ class Player extends MovingObject{
 	}
 
 	// static SPEED_MULTIPLIER = 3.5;
+	static SPEED_MULTIPLIER = 2;
 	static SPEED_MULTIPLIER = 1.5;
 	// static SPEED_MULTIPLIER = 0.5;
 	static COLOR = "red";
@@ -39,7 +40,6 @@ class Player extends MovingObject{
 	}
 
 	updateSpeed(vel){
-		// this.vel = [0,0];
 		this.vel[0] += vel[0] / 10 * this.speedMultiplier;
 		this.vel[1] += vel[1] / 10 * this.speedMultiplier;
 	}
