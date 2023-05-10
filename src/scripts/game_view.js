@@ -66,11 +66,11 @@ class GameView{
 				// Placeholder
 			}
 			// Consider switch / case?
-			if(key === 'e'){
-				this.game.accGear();
+			if(key === 'u'){
+				this.game.gearAccel();
 			}
-			if(key === 'q'){
-				this.game.decGear();
+			if(key === 'o'){
+				this.game.gearDecel();
 			}
 			if(key === ' '){
 				this.game.isPaused = !this.game.isPaused;

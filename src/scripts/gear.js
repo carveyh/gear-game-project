@@ -52,6 +52,14 @@ class Gear extends MovingObject{
 		});
 	}
 
+	gearAccel(){
+
+	}
+
+	gearDecel(){
+
+	}
+
 	draw(ctx){
 		// //Apply translation and rotation to canvas origin
 		ctx.save();
