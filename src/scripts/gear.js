@@ -11,7 +11,7 @@ class Gear extends MovingObject{
 		this.counterClockwise = options.counterClockwise;
 		this.timeBufferThreshold = options.timeBufferThreshold;
 		this.timeBufferStep = options.timeBufferStep;
-		this.currentTimeBuffer = options.currentTimeBuffer;
+		this.timeBufferCurrent = options.timeBufferCurrent;
 		this.vertices = options.vertices; //array of degrees
 		this.currentAngle = options.currentAngle; //current rotation degree
 		this.rotationVel = options.rotationVel;
@@ -27,13 +27,13 @@ class Gear extends MovingObject{
 		this.currentPlatform = null;
 
 		// this.player = null;
-		this.maxRotationVel = options.maxRotationVel;
+		this.rotationVelMax = options.rotationVelMax;
 		this.rotationAcc = options.rotationAcc;
-		this.minSpeed = 0;
+		this.rotationVelMin = 0;
 
 		this.ringGlow = 0;
 		this.ringGlowIncrement = 0.03;
-		this.maxRingGlow = 1;
+		this.ringGlowMax = 1;
 
 		this.generatePlatforms();
 	}
@@ -100,7 +100,7 @@ class Gear extends MovingObject{
 		ctx.beginPath();
 		if(this.isPlayerOn()){
 		// if(this.game.currentGear === this){
-			if(this.ringGlow < this.maxRingGlow) this.ringGlow += this.ringGlowIncrement * 1.1;
+			if(this.ringGlow < this.ringGlowMax) this.ringGlow += this.ringGlowIncrement * 1.1;
 		} else {
 			if(this.ringGlow > 0) this.ringGlow -= this.ringGlowIncrement * 3;
 		}
@@ -246,10 +246,10 @@ class Gear extends MovingObject{
 	customMove(timeDelta){
 		// //WITH stutter step and smooth periodic stop.
 
-		this.currentTimeBuffer += this.timeBufferStep * timeDelta / 20;
+		this.timeBufferCurrent += this.timeBufferStep * timeDelta / 20;
 
 		// //NEED TO DRY - BLOCK WITH MINOR DIFF 1of2 PARTS
-		if((this.currentTimeBuffer % this.timeBufferThreshold) < this.timeBufferThreshold * .65){
+		if((this.timeBufferCurrent % this.timeBufferThreshold) < this.timeBufferThreshold * .65){
 			let rotationDirection = 1;
 			this.counterClockwise ? rotationDirection = -1 : rotationDirection = 1;
 			let finalAngleChange = this.rotationVel * rotationDirection * timeDelta;
@@ -262,7 +262,7 @@ class Gear extends MovingObject{
 		}
 
 		// //NEED TO DRY - BLOCK WITH MINOR DIFF 2of2 PARTS
-		else if((this.currentTimeBuffer % this.timeBufferThreshold) < this.timeBufferThreshold * .75){
+		else if((this.timeBufferCurrent % this.timeBufferThreshold) < this.timeBufferThreshold * .75){
 		
 			let rotationDirection = 1;
 			this.counterClockwise ? rotationDirection = -1 : rotationDirection = 1;

@@ -9,17 +9,17 @@ class NullGear extends Gear{
 		options.counterClockwise = false;
 		options.timeBufferThreshold = 1;
 		options.timeBufferStep = 1;
-		options.currentTimeBuffer = 1;
+		options.timeBufferCurrent = 1;
 		options.vertices = [];
 		options.currentAngle = 0;
 		options.rotationVel = 0;
 		options.platformWidth = 0;
-		options.maxRotationVel = 0;
+		options.rotationVelMax = 0;
 		options.rotationAcc = 0;
-		options.minSpeed = 0;
+		options.rotationVelMin = 0;
 		options.ringGlow = 0;
 		options.ringGlowIncrement = 0;
-		options.maxRingGlow = 0;
+		options.ringGlowMax = 0;
 		
 		options.connectedGears = [];
 		options.player = null;
