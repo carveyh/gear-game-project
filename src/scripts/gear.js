@@ -78,9 +78,18 @@ class Gear extends MovingObject{
 		// //Draw all platforms - object representation of each path
 		this.drawAllPlatforms(ctx);
 
+		// //Draw floating text (optional)
+		this.drawFloatText(ctx);
+
 		// //Revert translation and rotation to canvas origin
 		ctx.restore();
 
+	}
+
+	drawFloatText(ctx){
+		// //Just proving to myself you can fillText with emojis (for most browsers)
+		// ctx.font = "20px Georgia";
+		// ctx.fillText("🥹", 100,100);
 	}
 
 	drawGearOutline(ctx){

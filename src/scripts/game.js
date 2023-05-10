@@ -56,7 +56,7 @@ class Game{
 		let newRadius;
 		let newCounterClockWise;
 		if(this.gears.length === 0){
-			newRadius = 45;
+			newRadius = 60;
 			newPos = [Game.DIM_X / 2, Game.DIM_Y - 100];
 			newCounterClockWise = false;
 		} else {
@@ -127,12 +127,27 @@ class Game{
 
 	draw(ctx){
 		// Iterate all in-game elements and draw on canvas
-		ctx.beginPath();
-		ctx.fillStyle = Game.BGCOLOR;
-		ctx.fillRect(0,0,Game.DIM_X,Game.DIM_Y);
-		ctx.closePath();
+
+		// //Draw background: simple color background
+		// ctx.beginPath();
+		// ctx.fillStyle = Game.BGCOLOR;
+		// ctx.fillRect(0,0,Game.DIM_X,Game.DIM_Y);
+		// ctx.closePath();
 		// ctx.drawImage(this.background,0,0, Game.DIM_X, Game.DIM_Y);
 		
+		// //Draw background: gradient background
+		ctx.beginPath();
+		// const gradient = ctx.createLinearGradient(0, 0, Game.DIM_X, Game.DIM_Y);
+		const gradient = ctx.createLinearGradient(0, 0, Game.DIM_X, 0);
+		gradient.addColorStop(0,`rgb(0,0,255)`);
+		gradient.addColorStop(0.25,`rgb(255,255,255)`);
+		gradient.addColorStop(0.75,`rgb(255,255,255)`);
+		gradient.addColorStop(1,`rgb(0,0,255)`);
+		ctx.fillStyle = gradient;
+		ctx.fillRect(0,0,Game.DIM_X,Game.DIM_Y);
+
+		ctx.closePath();
+
 		this.getAllObjects().forEach(obj => {
 			obj.draw(ctx);
 		});

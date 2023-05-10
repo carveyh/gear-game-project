@@ -4,6 +4,7 @@ Up Next:
 	- DONE - Asteroids, Bonus 2: requestAnimationFrame (vs using setInterval)
 	- DONE - Github: how to cut a branch to work on another feature, revisit Screwdoku project - sort of.
 	- Refresher on basic gear trigonometry
+	- Graph all gears per set.
 
 
 - class GameView
@@ -27,6 +28,12 @@ Up Next:
 - IDEAS:
 	- Run button, running on a gear will speed rotation of connected gear, to activate gears that slow return to "deactivated" state
 	
+- FLOW:
+	- Intro modal: welcome to the weird world of gears! What the heck is going on?? Move with WASD to start...and find out...
+
+	- What makes you tick
+	- IMAGAGAIMS
+
 Sources:
 - git branching and merging: https://stackoverflow.com/questions/4470523/create-a-branch-in-git-from-another-branch
 

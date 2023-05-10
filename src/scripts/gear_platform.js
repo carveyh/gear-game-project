@@ -13,10 +13,26 @@ class GearPlatform extends MovingObject{
 		this.angle = options.angle;
 		this.gear = options.gear;
 		this.OOBbuffer = 2;
+		this.playerWasHere = false;
 	}
 
-	isCollideWith(){
+	// //Manage OOB controller, to be called by game instance.
+	// //This controller then calls its inner helper methods.
+	manageOOB(obj){
+		// //Manage other object type OOB logic (PLACEHOLDER)
 
+		// //Manage player OOB logic
+		if(obj instanceof Player){
+			if(this.isObjInBounds(obj)){
+				this.playerWasHere = true;
+			} else {
+				if(this.game.currentGear === this.gear){
+					this.gear.gearPlatforms.some(platform => {
+						platform.isObjInBounds(obj)
+					})
+				}
+			}
+		}
 	}
 
 	isObjInBounds(obj){
@@ -52,7 +68,7 @@ class GearPlatform extends MovingObject{
 					if(leftBoundaryProximity <= this.OOBbuffer) handleOOBOptionOffset = Util.addTwoVectors(handleOOBOptionOffset, [2,0])
 					if(topBoundaryProximity <= this.OOBbuffer) handleOOBOptionOffset = Util.addTwoVectors(handleOOBOptionOffset, [2,0])
 					if(bottomBoundaryProximity <= this.OOBbuffer) handleOOBOptionOffset = Util.addTwoVectors(handleOOBOptionOffset, [-2,0])
-					
+
 					this.handleOOB(obj,handleOOBOptionOffset);
 				}
 				return false;
