@@ -209,9 +209,9 @@ class Gear extends MovingObject{
 
 
 		// //DISPLAY ANGLE OF EACH PLATFORM
-		// ctx.font = "20px Arial";
-		// ctx.fillStyle = "rgb(150,150,150)";
-		// ctx.fillText(`  ${platform.angle}`, platform.radius, 5)
+		ctx.font = "20px Arial";
+		ctx.fillStyle = "rgb(150,150,150)";
+		ctx.fillText(`  ${platform.angle}`, platform.radius, 5)
 		ctx.rotate(Util.radians(platform.angle) * -1);
 
 		// this.displayCoords(ctx);
@@ -223,7 +223,12 @@ class Gear extends MovingObject{
 
 	// //Detects if player is on a gear
 	isPlayerOn(){
-		return (Util.distance(this.game.player.pos, this.pos) < this.radius);
+		let gearToGearJumpBuffer = 0;
+		// let gearToGearJumpBuffer = 5;
+		// Permit a jump buffer if player is btwn 
+
+
+		return (Util.distance(this.game.player.pos, this.pos) < this.radius + gearToGearJumpBuffer);
 	}
 
 	checkCurrentPlatform(){

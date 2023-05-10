@@ -92,14 +92,16 @@ class Game{
 			rotationAcc: 0.2,
 			rotationVel: 5,
 			rotationVel: 0.1,
+			rotationVel: 0.05,
 			// rotationVel: 0.01,
 			// rotationVel: 0,
 			platformWidth: 30,
 			// vertices: [0,45,90,135,180, 270]
-			vertices: [0, 60, 180, 270]
+			// vertices: [0, 60, 180, 270]
 			// vertices: [45, 90, 225, 270]
 			// vertices: [45, 90, 157.5, 225, 270, 337.5]
 			// vertices: [0,180]
+			vertices: [0,115,245]
 		});
 
 		this.gears.push(gear);
@@ -113,28 +115,29 @@ class Game{
 		
 		// //Check if there is a current gear
 		this.checkCurrentGear(this.player);
-		this.currentGear.checkCurrentPlatform();
+		console.log(`${this.currentGear}`)
 
-		this.currentGear.gearPlatforms.forEach(platform => {
-			platform.isObjInBounds(this.player);
-		})
-
-		// //Logic, but doesn't actually affect anything yet.
-		// let allPlatforms = this.getAllGearPlatforms();
-		// let anyCollision = allPlatforms.some(platform => {
-		// 	return platform.isObjInBounds();
-		// })
+		if(this.currentGear){
+			this.currentGear.checkCurrentPlatform();
+		}
 		
 	}
 
+	// //This will also handle player OOB.
 	checkObjOOB(timeDelta){
 		// console.log(`current gear: ${this.currentGear.pos}`);
-		console.log(`current platform: ${this.currentGear.gearPlatforms[1].angle}`);
+		// console.log(`current platform: ${this.currentGear.gearPlatforms[1].angle}`);
 
-		// //Buggy.
-		// if(!this.currentGear.currentPlatform.isObjInBounds(this.player)){
-		// 	this.player.unMoveAndStop();
+		// //Check if a player moved onto a valid gear first:
+		// let onGear = this.gears.some(gear => {
+		// 	return gear.isPlayerOn();
+		// })
+		// if(!onGear){
+		// 	this.player.unMoveAndStop(timeDelta);
+
 		// }
+
+		// this.checkCurrentGear();
 
 		// //How about: we check if any player is on any of the gear platforms on the gear?
 		let onPlatform = this.currentGear.gearPlatforms.some(platform => {
@@ -156,11 +159,12 @@ class Game{
 				if(this.gears[i].isPlayerOn()){
 					this.currentGear = this.gears[i];
 					isOnAGear = true;
-					return;
+					break;
 				}
 				// this.currentGear = Game.NULL_GEAR;
 			}
 			if(!isOnAGear){
+				// this.currentGear = null;
 				// obj.unMoveAndStop();
 			}
 			
@@ -288,6 +292,7 @@ class Game{
 		this.checkCollisions();
 		this.moveLiveObjects(timeDelta);
 		// // checkCollisions() will update game.currentGear;
+		console.log(`checking collisions success after moving bg objects, and now trying after moving live objects`)
 		this.checkCollisions();
 		this.checkObjOOB(timeDelta);
 
