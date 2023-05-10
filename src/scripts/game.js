@@ -1,6 +1,7 @@
 import MovingObject from "./moving_object.js";
 import Player from "./player.js";
 import Gear from "./gear.js";
+import NullGear from "./null_gear.js";
 import GearPlatform from "./gear_platform.js";
 
 class Game{
@@ -13,6 +14,8 @@ class Game{
 		// this.gearPlatforms = []; //actually let each gear manage each platform...should not do this.
 		this.generics = [];
 		this.gears = [];
+
+		this.nullGear = new NullGear({game: this});
 
 		// Add generic gears
 		this.addGear();
@@ -95,20 +98,25 @@ class Game{
 	checkCollisions(){
 		// Iterate all in-game elements and check collision
 		
+		// //Check if there is a current gear
+		this.checkCurrentGear();
+
+		// //Logic, but doesn't actually affect anything yet.
+		let allPlatforms = this.getAllGearPlatforms();
+		let anyCollision = allPlatforms.some(platform => {
+			return platform.isObjInBounds();
+		})
+		
+	}
+
+	checkCurrentGear(){
 		for(let i = 0; i < this.gears.length; i++){
 			if(this.gears[i].isPlayerOn()){
 				this.currentGear = this.gears[i];
-				break;
+				return;
 			}
+			this.currentGear = this.nullGear;
 		}
-
-		let allPlatforms = this.getAllGearPlatforms();
-		let anyCollision = allPlatforms.some(platform => {
-			return platform.isCollideWithPlayer();
-		})
-		
-
-		
 	}
 
 	draw(ctx){
@@ -140,6 +148,14 @@ class Game{
 		return allPlatforms;
 	}
 
+	gearAccel(){
+		this.currentGear.gearAccel();
+	}
+
+	gearDecel(){
+		this.currentGear.gearDecel();
+	}
+
 	isOutOfBounds(pos){
 		// Check OOB.
 	}
@@ -160,7 +176,7 @@ class Game{
 		// invokes moveObjects and checkCollisions
 		this.moveObjects(timeDelta);
 		this.checkCollisions();
-		console.log(this.currentGear);
+		// console.log(this.currentGear);
 	}
 
 

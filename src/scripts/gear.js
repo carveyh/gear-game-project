@@ -52,6 +52,14 @@ class Gear extends MovingObject{
 		});
 	}
 
+	gearAccel(){
+
+	}
+
+	gearDecel(){
+
+	}
+
 	draw(ctx){
 		// //Apply translation and rotation to canvas origin
 		ctx.save();
@@ -69,7 +77,7 @@ class Gear extends MovingObject{
 
 		// //Draw all platforms - object representation of each path
 		this.drawAllPlatforms(ctx);
-		
+
 		// //Revert translation and rotation to canvas origin
 		ctx.restore();
 
@@ -100,6 +108,16 @@ class Gear extends MovingObject{
 		ctx.closePath();
 	}
 
+	drawGearInnerRing(ctx){
+		console.log(this.game.currentGear === this)
+		if(this.game.currentGear === this){
+			// ctx.strokeStyle = `rgb(${Math.random() * 255},${Math.random() * 255}, ${Math.random() * 255})`;
+			ctx.strokeStyle = `rgb(255,255,0)`;
+			ctx.arc(0,0,this.platformWidth / 2, 0, 2*Math.PI, false)
+			ctx.stroke();
+		}
+	}
+
 	drawGearImage(ctx){
 		ctx.drawImage(this.game.gearShiny, 0,0, 291, 291, this.radius * -1, this.radius * -1, this.radius * 2, this.radius * 2)
 		ctx.drawImage(
@@ -118,9 +136,11 @@ class Gear extends MovingObject{
 	// //Visualize platforms - draw all platforms
 	drawAllPlatforms(ctx){
 		// this.drawPlatformCenter(ctx);
+		this.playerOnAPlatform = false;
 		this.gearPlatforms.forEach(platform => {
 			this.drawPlatform(platform, ctx);
 		})
+		if(this.playerOnAPlatform) this.drawGearInnerRing(ctx);
 	}
 
 	// //Draw center circle area
@@ -144,16 +164,13 @@ class Gear extends MovingObject{
 		// ctx.stroke();
 		ctx.rotate(Util.radians(platform.angle));
 		
-		if(platform.isCollideWithPlayer()){
+		if(platform.isObjInBounds(this.game.player)){
 			ctx.fillStyle = "rgb(0,255,0)";
 			ctx.fillRect(0, (platform.width / 2) * -1, platform.radius, platform.width );
 			ctx.arc(0, 0, this.platformWidth / 2, 0, 2*Math.PI,false);
 			ctx.stroke();
+			this.playerOnAPlatform = true;
 			
-			// ctx.strokeStyle = `rgb(${Math.random() * 255},${Math.random() * 255}, ${Math.random() * 255})`;
-			ctx.strokeStyle = `rgb(255,255,0)`;
-			ctx.arc(0,0,this.platformWidth / 2, 0, 2*Math.PI, false)
-			ctx.stroke();
 
 		} else {
 
@@ -209,13 +226,9 @@ class Gear extends MovingObject{
 			this.counterClockwise ? rotationDirection = -1 : rotationDirection = 1;
 			let finalAngleChange = this.rotationVel * rotationDirection * timeDelta / 10;
 			this.currentAngle = (this.currentAngle + finalAngleChange) % 360;
-
-			// console.log(`angle change (degrees): ${finalAngleChange} | current angle: ${this.currentAngle}`);
-			// if(this.currentAngle < 5) console.log(`full circle`);
 			if(this.isPlayerOn()){
 				this.rotatePlayer(timeDelta, finalAngleChange);
 			}
-			// this.rotateTestPoint(timeDelta, finalAngleChange);
 		}
 	}
 
