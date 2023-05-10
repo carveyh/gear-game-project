@@ -100,7 +100,7 @@ class Game{
 		
 		// //Check if there is a current gear
 		this.checkCurrentGear();
-		
+
 		// //Logic, but doesn't actually affect anything yet.
 		let allPlatforms = this.getAllGearPlatforms();
 		let anyCollision = allPlatforms.some(platform => {

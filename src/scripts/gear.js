@@ -226,13 +226,9 @@ class Gear extends MovingObject{
 			this.counterClockwise ? rotationDirection = -1 : rotationDirection = 1;
 			let finalAngleChange = this.rotationVel * rotationDirection * timeDelta / 10;
 			this.currentAngle = (this.currentAngle + finalAngleChange) % 360;
-
-			// console.log(`angle change (degrees): ${finalAngleChange} | current angle: ${this.currentAngle}`);
-			// if(this.currentAngle < 5) console.log(`full circle`);
 			if(this.isPlayerOn()){
 				this.rotatePlayer(timeDelta, finalAngleChange);
 			}
-			// this.rotateTestPoint(timeDelta, finalAngleChange);
 		}
 	}
 
