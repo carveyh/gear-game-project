@@ -8,8 +8,7 @@ class Player extends MovingObject{
 	constructor(options){
 		// options.pos ||= [Game.DIM_X / 4, Game.DIM_Y / 4];
 
-		// //Now...we initialize player location to the first gear of the level.
-		
+		// //Now...we initialize player location to the same as first gear of the level.
 		const spawnGear = options.game.gears[0];
 		options.pos = spawnGear.pos.slice();
 		// options.pos[1] += 5; //for testing issues with zero distance from current gear

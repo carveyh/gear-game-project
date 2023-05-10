@@ -3,10 +3,12 @@ import Player from "./player.js";
 import Gear from "./gear.js";
 import NullGear from "./null_gear.js";
 import GearPlatform from "./gear_platform.js";
+import NullPlatform from "./null_platform.js";
 
 class Game{
 
 	static NULL_GEAR = new NullGear({game: this});
+	static NULL_PLATFORM = new NullPlatform({game: this, gear: Game.NULL_GEAR});
 
 	constructor(){
 		// Collection of gears, graph data structure

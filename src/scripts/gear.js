@@ -27,10 +27,6 @@ class Gear extends MovingObject{
 		this.ringGlowIncrement = 0.03;
 		this.maxRingGlow = 1;
 
-		let originTestCoords = Util.scaledVectorDegrees(45, this.radius);
-		// this.testPoint = [this.pos[0], this.pos[1] + this.radius];
-		this.testPoint = [originTestCoords[0] + this.pos[0], originTestCoords[1] + this.pos[1]];
-
 		this.generatePlatforms();
 	}
 
@@ -66,8 +62,8 @@ class Gear extends MovingObject{
 		ctx.translate(this.pos[0], this.pos[1]);
 		ctx.rotate(Util.radians(this.currentAngle));
 
-		// //Draw Gear itself
-		this.drawGearSilhouette(ctx);
+		// //Draw Gear canvas basic shape
+		// this.drawGearSilhouette(ctx);
 
 		// //Draw outline of gear if player is standing on it
 		this.drawGearOutline(ctx);
@@ -128,7 +124,12 @@ class Gear extends MovingObject{
 	}
 
 	drawGearImage(ctx){
-		ctx.drawImage(this.game.gearShiny, 0,0, 291, 291, this.radius * -1, this.radius * -1, this.radius * 2, this.radius * 2)
+		// ctx.drawImage(this.game.gearShiny, 0,0, 291, 291, this.radius * -1, this.radius * -1, this.radius * 2, this.radius * 2)
+
+		let oppOffset = 24;
+		if(this.counterClockwise){
+			ctx.rotate(Util.radians(360/oppOffset));
+		}
 		ctx.drawImage(
 			this.game.gearShiny, 
 			0,
@@ -140,6 +141,10 @@ class Gear extends MovingObject{
 			(this.radius + 5) * 2, 
 			(this.radius + 5) * 2
 		);
+
+		if(this.counterClockwise){
+			ctx.rotate(Util.radians(360/oppOffset) * -1);
+		}
 	}
 
 	// //Visualize platforms - draw all platforms
