@@ -83,9 +83,8 @@ class Game{
 			vel: [0,0],
 			// radius: 60,
 			game: this,
-			// counterClockwise: false,
-			// timeBufferThreshold: 150,
 			timeBufferThreshold: 150,
+			// timeBufferThreshold: 10,
 			timeBufferStep: 1,
 			currentTimeBuffer: 0, 
 			currentAngle: 0,
@@ -94,11 +93,11 @@ class Game{
 			rotationVel: 5,
 			rotationVel: 0.1,
 			// rotationVel: 0.01,
-			// rotationVel: 0,
+			rotationVel: 0,
 			platformWidth: 30,
-			// vertices: [0,45,90,135,180]
-			vertices: [0, 60, 180, 270]
-			// vertices: [60]
+			// vertices: [0,45,90,135,180, 270]
+			// vertices: [0, 60, 180, 270]
+			vertices: [0, 90, 180, 270]
 		});
 
 		this.gears.push(gear);
@@ -126,11 +125,21 @@ class Game{
 		
 	}
 
-	checkObjOOB(){
+	checkObjOOB(timeDelta){
 		// console.log(`current gear: ${this.currentGear.pos}`);
 		console.log(`current platform: ${this.currentGear.gearPlatforms[1].angle}`);
-		if(!this.currentGear.currentPlatform.isObjInBounds(this.player)){
-			this.player.unMoveAndStop();
+
+		// //Buggy.
+		// if(!this.currentGear.currentPlatform.isObjInBounds(this.player)){
+		// 	this.player.unMoveAndStop();
+		// }
+
+		// //How about: we check if any player is on any of the gear platforms on the gear?
+		let onPlatform = this.currentGear.gearPlatforms.some(platform => {
+			return platform.isObjInBounds(this.player);
+		})
+		if(!onPlatform){
+			this.player.unMoveAndStop(timeDelta);
 		}
 	}
 
@@ -270,10 +279,11 @@ class Game{
 		// this.checkCollisions();
 
 		// //Step 2a: move live objs; Step 2b: checks collisions
+		this.checkCollisions();
 		this.moveLiveObjects(timeDelta);
 		// // checkCollisions() will update game.currentGear;
 		this.checkCollisions();
-		this.checkObjOOB();
+		this.checkObjOOB(timeDelta);
 
 
 		// //

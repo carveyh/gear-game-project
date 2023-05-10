@@ -58,6 +58,7 @@ class GearPlatform extends MovingObject{
 			let bottomBoundaryProximity = this.radius - playerPosRelativeToPlat[1];
 			let handleOOBOptionOffset = [0,0];
 	
+			// 
 			if(((playerPosRelativeToPlat[0] < this.width / 2) && (playerPosRelativeToPlat[0] > this.width / -2))
 				&& ((playerPosRelativeToPlat[1] < this.radius) && (playerPosRelativeToPlat[1] > 0)))
 			{
@@ -69,7 +70,7 @@ class GearPlatform extends MovingObject{
 					if(topBoundaryProximity <= this.OOBbuffer) handleOOBOptionOffset = Util.addTwoVectors(handleOOBOptionOffset, [2,0])
 					if(bottomBoundaryProximity <= this.OOBbuffer) handleOOBOptionOffset = Util.addTwoVectors(handleOOBOptionOffset, [-2,0])
 
-					this.handleOOB(obj,handleOOBOptionOffset);
+					// this.handleOOB(obj,handleOOBOptionOffset);
 				}
 				return false;
 			}
