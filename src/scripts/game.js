@@ -104,7 +104,7 @@ class Game{
 		// //Logic, but doesn't actually affect anything yet.
 		let allPlatforms = this.getAllGearPlatforms();
 		let anyCollision = allPlatforms.some(platform => {
-			return platform.isCollideWithPlayer();
+			return platform.isObjInBounds();
 		})
 		
 	}

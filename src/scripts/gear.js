@@ -164,7 +164,7 @@ class Gear extends MovingObject{
 		// ctx.stroke();
 		ctx.rotate(Util.radians(platform.angle));
 		
-		if(platform.isCollideWithPlayer()){
+		if(platform.isObjInBounds(this.game.player)){
 			ctx.fillStyle = "rgb(0,255,0)";
 			ctx.fillRect(0, (platform.width / 2) * -1, platform.radius, platform.width );
 			ctx.arc(0, 0, this.platformWidth / 2, 0, 2*Math.PI,false);
