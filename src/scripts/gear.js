@@ -254,7 +254,8 @@ class Gear extends MovingObject{
 			let finalAngleChange = this.rotationVel * rotationDirection * timeDelta;
 			this.currentAngle = (this.currentAngle + finalAngleChange) % 360;
 
-			if(this.isPlayerOn()){
+			if(this.game.currentGear === this){
+			// if(this.isPlayerOn()){ //THIS IMPLEMENTATION WILL BUG - a player can be on multiple gears at the same time at connection points. This will ensure only the current gear rotates.
 				this.rotatePlayer(timeDelta, finalAngleChange);
 			}
 		}
