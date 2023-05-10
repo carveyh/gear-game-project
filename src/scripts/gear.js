@@ -1,6 +1,8 @@
 import * as Util from "./util.js";
+import Game from "./game.js";
 import MovingObject from "./moving_object";
 import GearPlatform from "./gear_platform.js";
+import NullPlatform from "./null_platform.js";
 
 class Gear extends MovingObject{
 	constructor(options){
@@ -18,7 +20,12 @@ class Gear extends MovingObject{
 		this.vertices ||= [0,180]; //will have default a straight path through
 		this.connectedGears ||= []; //graph structure of connected gears
 		this.gearPlatforms = [];
-		this.player = null;
+
+		// //Revisit. Game.NULL_PLATFORM errors "Uncaught TypeError: Cannot read properties of undefined". Handling with a null for now.
+		// this.currentPlatform = Game.NULL_PLATFORM;
+		this.currentPlatform = null;
+
+		// this.player = null;
 		this.maxRotationVel = options.maxRotationVel;
 		this.rotationAcc = options.rotationAcc;
 		this.minSpeed = 0;
@@ -26,10 +33,6 @@ class Gear extends MovingObject{
 		this.ringGlow = 0;
 		this.ringGlowIncrement = 0.03;
 		this.maxRingGlow = 1;
-
-		let originTestCoords = Util.scaledVectorDegrees(45, this.radius);
-		// this.testPoint = [this.pos[0], this.pos[1] + this.radius];
-		this.testPoint = [originTestCoords[0] + this.pos[0], originTestCoords[1] + this.pos[1]];
 
 		this.generatePlatforms();
 	}
@@ -66,8 +69,8 @@ class Gear extends MovingObject{
 		ctx.translate(this.pos[0], this.pos[1]);
 		ctx.rotate(Util.radians(this.currentAngle));
 
-		// //Draw Gear itself
-		this.drawGearSilhouette(ctx);
+		// //Draw Gear canvas basic shape
+		// this.drawGearSilhouette(ctx);
 
 		// //Draw outline of gear if player is standing on it
 		this.drawGearOutline(ctx);
@@ -78,14 +81,24 @@ class Gear extends MovingObject{
 		// //Draw all platforms - object representation of each path
 		this.drawAllPlatforms(ctx);
 
+		// //Draw floating text (optional)
+		this.drawFloatText(ctx);
+
 		// //Revert translation and rotation to canvas origin
 		ctx.restore();
 
 	}
 
+	drawFloatText(ctx){
+		// //Just proving to myself you can fillText with emojis (for most browsers)
+		// ctx.font = "20px Georgia";
+		// ctx.fillText("🥹", 100,100);
+	}
+
 	drawGearOutline(ctx){
 		ctx.beginPath();
 		if(this.isPlayerOn()){
+		// if(this.game.currentGear === this){
 			if(this.ringGlow < this.maxRingGlow) this.ringGlow += this.ringGlowIncrement * 1.1;
 		} else {
 			if(this.ringGlow > 0) this.ringGlow -= this.ringGlowIncrement * 3;
@@ -119,7 +132,12 @@ class Gear extends MovingObject{
 	}
 
 	drawGearImage(ctx){
-		ctx.drawImage(this.game.gearShiny, 0,0, 291, 291, this.radius * -1, this.radius * -1, this.radius * 2, this.radius * 2)
+		// ctx.drawImage(this.game.gearShiny, 0,0, 291, 291, this.radius * -1, this.radius * -1, this.radius * 2, this.radius * 2)
+
+		let oppOffset = 24;
+		if(this.counterClockwise){
+			ctx.rotate(Util.radians(360/oppOffset));
+		}
 		ctx.drawImage(
 			this.game.gearShiny, 
 			0,
@@ -131,6 +149,10 @@ class Gear extends MovingObject{
 			(this.radius + 5) * 2, 
 			(this.radius + 5) * 2
 		);
+
+		if(this.counterClockwise){
+			ctx.rotate(Util.radians(360/oppOffset) * -1);
+		}
 	}
 
 	// //Visualize platforms - draw all platforms
@@ -144,13 +166,13 @@ class Gear extends MovingObject{
 	}
 
 	// //Draw center circle area
-	drawPlatformCenter(ctx){
-		ctx.beginPath();
-		ctx.strokeStyle = "rgb(0,255,0)";
-		ctx.arc(0, 0, this.platformWidth / 2, 0, 2*Math.PI,false);
-		ctx.stroke();
-		ctx.closePath();
-	}
+	// drawPlatformCenter(ctx){
+	// 	ctx.beginPath();
+	// 	ctx.strokeStyle = "rgb(0,255,0)";
+	// 	ctx.arc(0, 0, this.platformWidth / 2, 0, 2*Math.PI,false);
+	// 	ctx.stroke();
+	// 	ctx.closePath();
+	// }
 
 	// //Draw an individual platform
 	drawPlatform(platform, ctx){
@@ -164,7 +186,9 @@ class Gear extends MovingObject{
 		// ctx.stroke();
 		ctx.rotate(Util.radians(platform.angle));
 		
-		if(platform.isObjInBounds(this.game.player)){
+		if((this.game.currentGear === this) && (platform.isObjInBounds(this.game.player))){
+		// if((this.game.currentGear === this)){
+		// if(platform.isObjInBounds(this.game.player)){
 			ctx.fillStyle = "rgb(0,255,0)";
 			ctx.fillRect(0, (platform.width / 2) * -1, platform.radius, platform.width );
 			ctx.arc(0, 0, this.platformWidth / 2, 0, 2*Math.PI,false);
@@ -184,7 +208,7 @@ class Gear extends MovingObject{
 
 
 
-
+		// //DISPLAY ANGLE OF EACH PLATFORM
 		ctx.font = "20px Arial";
 		ctx.fillStyle = "rgb(150,150,150)";
 		ctx.fillText(`  ${platform.angle}`, platform.radius, 5)
@@ -199,7 +223,23 @@ class Gear extends MovingObject{
 
 	// //Detects if player is on a gear
 	isPlayerOn(){
-		return (Util.distance(this.game.player.pos, this.pos) < this.radius);
+		let gearToGearJumpBuffer = 0;
+		// let gearToGearJumpBuffer = 5;
+		// Permit a jump buffer if player is btwn 
+
+
+		return (Util.distance(this.game.player.pos, this.pos) < this.radius + gearToGearJumpBuffer);
+	}
+
+	checkCurrentPlatform(){
+		console.log(`check current platform: all platforms: ${this.gearPlatforms}`);
+		for(let i = 0; i < this.gearPlatforms.length; i++){
+			if(this.gearPlatforms[i].isObjInBounds(this.game.player)){
+				this.currentPlatform = this.gearPlatforms[i];
+				return;
+			}
+		}
+		// this.currentPlatform = Game.NULL_PLATFORM;
 	}
 
 	customMove(timeDelta){
@@ -214,7 +254,8 @@ class Gear extends MovingObject{
 			let finalAngleChange = this.rotationVel * rotationDirection * timeDelta;
 			this.currentAngle = (this.currentAngle + finalAngleChange) % 360;
 
-			if(this.isPlayerOn()){
+			if(this.game.currentGear === this){
+			// if(this.isPlayerOn()){ //THIS IMPLEMENTATION WILL BUG - a player can be on multiple gears at the same time at connection points. This will ensure only the current gear rotates.
 				this.rotatePlayer(timeDelta, finalAngleChange);
 			}
 		}
@@ -247,8 +288,8 @@ class Gear extends MovingObject{
 
 	rotatePlayer(timeDelta, finalAngleChange){
 		if(this.rotationVel > 0){
-			if(this.game.player.pos[0] === this.pos[0] && this.game.player.pos[1] === this.pos[1] ||
-				this.game.player.isMoving ){
+			// if(this.game.player.pos[0] === this.pos[0] && this.game.player.pos[1] === this.pos[1] || this.game.player.isMoving ){
+			if(this.game.player.pos[0] === this.pos[0] && this.game.player.pos[1] === this.pos[1]){
 
 			} else {
 				// //Rotate the player based on player's current distance from gear center.
@@ -256,18 +297,10 @@ class Gear extends MovingObject{
 				// //First, find player's current pos relative to gear pos as origin:
 				const playerPosRelativeToGear = [this.game.player.pos[0] - this.pos[0], this.game.player.pos[1] - this.pos[1]];
 				
-				// //Potential issue with this step: if either x or y is negative, Math.atan will return a negative result, meaning a negative angle.
-				// // //Get the angle in radians relative to gear pos as origin:
-				// const playerAngleRelToGearRadians = Math.atan(playerPosRelativeToGear[1] / playerPosRelativeToGear[0]); //radians
-				
-				
 				// //FIX of issue:
 				// //Get the angle in radians relative to gear pos as origin:
 				const playerAngleRelToGearRadians = this.calcPlayerAngleRelToGearRadians(playerPosRelativeToGear); //radians
 				
-
-
-
 				// //Apply the same angle change made to gear as to player:
 				// //It has to be in radians.
 				const finalAngleChangeRadians = Util.radians(finalAngleChange); //radians
@@ -278,7 +311,8 @@ class Gear extends MovingObject{
 				const playerNewPosRelativeToGear = Util.scaledVectorRadians(playerNewAngleRadians, hypotenuse);
 				// //Finally, translate new player position from gear origin to canvas origin:
 				const newPlayerFinalPos = [playerNewPosRelativeToGear[0] + this.pos[0], playerNewPosRelativeToGear[1] + this.pos[1]];
-				this.game.player.pos = newPlayerFinalPos;
+				// this.game.player.pos = newPlayerFinalPos;
+				this.game.player.updatePos(newPlayerFinalPos);
 				
 			}
 		}

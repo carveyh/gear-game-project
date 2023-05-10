@@ -9,14 +9,31 @@ class GearPlatform extends MovingObject{
 
 		// NEED 4 THINGS TO DEFINE A PLATFORM IN 2D SPACE:
 		// pos, width, radius (=== length / 2), currentAngle
+		this.gear = options.gear;
 		this.width = options.width;
 		this.angle = options.angle;
-		this.gear = options.gear;
+		this.OOBbuffer = 2;
+		this.playerWasHere = false;
 	}
 
-	isCollideWith(){
+	// // //Manage OOB controller, to be called by game instance.
+	// // //This controller then calls its inner helper methods.
+	// manageOOB(obj){
+	// 	// //Manage other object type OOB logic (PLACEHOLDER)
 
-	}
+	// 	// //Manage player OOB logic
+	// 	if(obj instanceof Player){
+	// 		if(this.isObjInBounds(obj)){
+	// 			this.playerWasHere = true;
+	// 		} else {
+	// 			if(this.game.currentGear === this.gear){
+	// 				this.gear.gearPlatforms.some(platform => {
+	// 					platform.isObjInBounds(obj)
+	// 				})
+	// 			}
+	// 		}
+	// 	}
+	// }
 
 	isObjInBounds(obj){
 		if(obj instanceof Player){
@@ -34,19 +51,45 @@ class GearPlatform extends MovingObject{
 				(Math.cos(overallRadians) * playerTranslated[0]) + (Math.sin(overallRadians) * playerTranslated[1]),
 				(-1 * Math.sin(overallRadians) * playerTranslated[0]) + (Math.cos(overallRadians) * playerTranslated[1])
 			];
+
+			let rightBoundaryProximity = (this.width / 2) - playerPosRelativeToPlat[0];
+			let leftBoundaryProximity = playerPosRelativeToPlat[0] - (this.width / -2);
+			let topBoundaryProximity = playerPosRelativeToPlat[1];
+			let bottomBoundaryProximity = this.radius - playerPosRelativeToPlat[1];
+			let handleOOBOptionOffset = [0,0];
 	
+
+			// THIS ACTUALLY CHECKS IF PLAYER IS ON
+			// let platformToPlatformJumpBuffer = 5;
+			let platformToPlatformJumpBuffer = 0;
+			console.log(`platform angle: ${this.angle}`)
+			console.log(`platform width: ${this.width}`)
+			console.log(`platform depth: ${this.radius}`)
+			console.log(`playerPosRelativeToPlat: ${playerPosRelativeToPlat}`);
 			if(((playerPosRelativeToPlat[0] < this.width / 2) && (playerPosRelativeToPlat[0] > this.width / -2))
-				&& ((playerPosRelativeToPlat[1] < this.radius) && (playerPosRelativeToPlat[1] > 0)))
+				&& ((playerPosRelativeToPlat[1] < this.radius + platformToPlatformJumpBuffer) && (playerPosRelativeToPlat[1] > 0)))
 			{
 				return true;
 			} else {
+				if(this.gear.isPlayerOn()){
+					// if(rightBoundaryProximity <= this.OOBbuffer) handleOOBOptionOffset = Util.addTwoVectors(handleOOBOptionOffset, [-2,0])
+					// if(leftBoundaryProximity <= this.OOBbuffer) handleOOBOptionOffset = Util.addTwoVectors(handleOOBOptionOffset, [2,0])
+					// if(topBoundaryProximity <= this.OOBbuffer) handleOOBOptionOffset = Util.addTwoVectors(handleOOBOptionOffset, [2,0])
+					// if(bottomBoundaryProximity <= this.OOBbuffer) handleOOBOptionOffset = Util.addTwoVectors(handleOOBOptionOffset, [-2,0])
+
+					// this.handleOOB(obj,handleOOBOptionOffset);
+				}
 				return false;
 			}
 		}
 	}
 
-	handleOOB(obj){
-		
+	// //I want this to push the player back onto the platform if player is not moving onto another "steppable" object.
+	handleOOB(obj, options){
+		if(obj instanceof Player){
+			// //Math to apply the offset in original x,y coord system
+			obj.updatePos
+		}
 	}
 
 
