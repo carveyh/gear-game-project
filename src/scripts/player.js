@@ -38,6 +38,12 @@ class Player extends MovingObject{
 
 	}
 
+	unMoveAndStop(){
+		this.pos[0] -= this.vel[0];
+		this.pos[1] -= this.vel[1];
+		this.vel = [0,0];
+	}
+
 	updatePos(newPos){
 		this.oldPos = this.pos;
 		this.pos = newPos;

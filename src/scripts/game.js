@@ -7,8 +7,13 @@ import NullPlatform from "./null_platform.js";
 
 class Game{
 
+	// //Revisit. `game: this`, `this` will technically refer to Game class not the active or any Game instance.
 	static NULL_GEAR = new NullGear({game: this});
-	static NULL_PLATFORM = new NullPlatform({game: this, gear: Game.NULL_GEAR});
+
+	// //Revisit. Attempts not being read successfully by Gear constructor() as the default value.
+	// static NULL_PLATFORM = new NullPlatform({game: this, gear: this.NULL_GEAR});
+	// static NULL_PLATFORM = new NullPlatform({game: this, gear: new NullGear({game: this})});
+	// static NULL_PLATFORM = new NullPlatform({game: this, gear: null});
 
 	constructor(){
 		// Collection of gears, graph data structure
@@ -129,7 +134,17 @@ class Game{
 
 	draw(ctx){
 		// Iterate all in-game elements and draw on canvas
+		
+		// //Draw game background
+		this.drawGameBackground(ctx);
 
+
+		this.getAllObjects().forEach(obj => {
+			obj.draw(ctx);
+		});
+	}
+
+	drawGameBackground(ctx){
 		// //Draw background: simple color background
 		// ctx.beginPath();
 		// ctx.fillStyle = Game.BGCOLOR;
@@ -149,10 +164,6 @@ class Game{
 		ctx.fillRect(0,0,Game.DIM_X,Game.DIM_Y);
 
 		ctx.closePath();
-
-		this.getAllObjects().forEach(obj => {
-			obj.draw(ctx);
-		});
 	}
 
 	getAllObjects(){

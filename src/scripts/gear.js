@@ -1,6 +1,8 @@
 import * as Util from "./util.js";
+import Game from "./game.js";
 import MovingObject from "./moving_object";
 import GearPlatform from "./gear_platform.js";
+import NullPlatform from "./null_platform.js";
 
 class Gear extends MovingObject{
 	constructor(options){
@@ -18,6 +20,11 @@ class Gear extends MovingObject{
 		this.vertices ||= [0,180]; //will have default a straight path through
 		this.connectedGears ||= []; //graph structure of connected gears
 		this.gearPlatforms = [];
+
+		// //Revisit. Game.NULL_PLATFORM errors "Uncaught TypeError: Cannot read properties of undefined". Handling with a null for now.
+		// this.currentPlatform = Game.NULL_PLATFORM;
+		this.currentPlatform = null;
+
 		// this.player = null;
 		this.maxRotationVel = options.maxRotationVel;
 		this.rotationAcc = options.rotationAcc;
@@ -215,6 +222,16 @@ class Gear extends MovingObject{
 	// //Detects if player is on a gear
 	isPlayerOn(){
 		return (Util.distance(this.game.player.pos, this.pos) < this.radius);
+	}
+
+	checkCurrentPlatform(){
+		for(let i = 0; i < this.gearPlatforms.length; i++){
+			if(this.gearPlatforms[i].isObjInBounds(this.game.player)){
+				this.currentPlatform = this.gearPlatforms[i];
+				return;
+			}
+		}
+		this.currentPlatform = Game.NULL_PLATFORM;
 	}
 
 	customMove(timeDelta){

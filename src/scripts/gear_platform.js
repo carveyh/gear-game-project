@@ -9,9 +9,9 @@ class GearPlatform extends MovingObject{
 
 		// NEED 4 THINGS TO DEFINE A PLATFORM IN 2D SPACE:
 		// pos, width, radius (=== length / 2), currentAngle
+		this.gear = options.gear;
 		this.width = options.width;
 		this.angle = options.angle;
-		this.gear = options.gear;
 		this.OOBbuffer = 2;
 		this.playerWasHere = false;
 	}
