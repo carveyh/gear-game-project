@@ -6,6 +6,8 @@ import GearPlatform from "./gear_platform.js";
 
 class Game{
 
+	static NULL_GEAR = new NullGear({game: this});
+
 	constructor(){
 		// Collection of gears, graph data structure
 		// Collection of enemies
@@ -15,7 +17,9 @@ class Game{
 		this.generics = [];
 		this.gears = [];
 
-		this.nullGear = new NullGear({game: this});
+		
+
+		this.currentGear = Game.NULL_GEAR;
 
 		// Add generic gears
 		this.addGear();
@@ -29,8 +33,6 @@ class Game{
 		this.player = new Player({game: this});
 
 		this.isPaused = false;
-
-		this.currentGear = null;
 
 		// this.addGenericObj();
 
@@ -101,11 +103,15 @@ class Game{
 		// //Check if there is a current gear
 		this.checkCurrentGear();
 
-		// //Logic, but doesn't actually affect anything yet.
-		let allPlatforms = this.getAllGearPlatforms();
-		let anyCollision = allPlatforms.some(platform => {
-			return platform.isObjInBounds();
+		this.currentGear.gearPlatforms.forEach(platform => {
+			platform.isObjInBounds(this.player);
 		})
+
+		// //Logic, but doesn't actually affect anything yet.
+		// let allPlatforms = this.getAllGearPlatforms();
+		// let anyCollision = allPlatforms.some(platform => {
+		// 	return platform.isObjInBounds();
+		// })
 		
 	}
 
@@ -115,7 +121,7 @@ class Game{
 				this.currentGear = this.gears[i];
 				return;
 			}
-			this.currentGear = this.nullGear;
+			this.currentGear = Game.NULL_GEAR;
 		}
 	}
 

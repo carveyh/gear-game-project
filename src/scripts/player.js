@@ -22,7 +22,7 @@ class Player extends MovingObject{
 		this.gear = spawnGear;
 		spawnGear.player = this;
 		this.speedMultiplier = Player.SPEED_MULTIPLIER;
-
+		this.oldPos = this.pos;
 	}
 
 	// static SPEED_MULTIPLIER = 3.5;
@@ -37,6 +37,11 @@ class Player extends MovingObject{
 
 	customMove(timeDelta){
 
+	}
+
+	updatePos(newPos){
+		this.oldPos = this.pos;
+		this.pos = newPos;
 	}
 
 	updateSpeed(vel){

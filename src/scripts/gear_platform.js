@@ -38,15 +38,19 @@ class GearPlatform extends MovingObject{
 			if(((playerPosRelativeToPlat[0] < this.width / 2) && (playerPosRelativeToPlat[0] > this.width / -2))
 				&& ((playerPosRelativeToPlat[1] < this.radius) && (playerPosRelativeToPlat[1] > 0)))
 			{
+				console.log(`IN BOUNDS`);
 				return true;
 			} else {
+				console.log(`OUT OF BOUNDS`);
 				return false;
 			}
 		}
 	}
 
-	handleOOB(obj){
-		
+	handleOOB(obj, options){
+		if(obj instanceof Player){
+
+		}
 	}
 
 
