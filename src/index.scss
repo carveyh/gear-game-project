@@ -1,3 +1,4 @@
+@import "./styles/reset.scss";
 @import "./styles/canvas.scss";
 
 // //Apply a reset.css
@@ -13,6 +14,7 @@ header {
 	}
 
 }
+
 
 
 
@@ -39,9 +41,12 @@ header h1 {
 	justify-content: flex-end;
 }
 
-#game-canvas {
-	border: $border-style;
+#github, #linkedin {
+	width: auto;
+	height: 25px;
 }
+
+// //Body
 
 #all-container {
 	display: flex;
@@ -49,22 +54,7 @@ header h1 {
 	justify-content: space-around;
 }
 
-// #spoilers-marker {
-	
-// }
-
-#spoilers-container {
-	display: flex;
-	flex-direction: column;
+#game-canvas {
+	border: $border-style;
 }
 
-#spoilers {
-	display: none;
-}
-
-#spoilers-marker:hover + #spoilers {
-	display: inline;
-	position: absolute;
-	right: 500px;
-	color: red;
-}
