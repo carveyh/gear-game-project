@@ -39,7 +39,7 @@ class Game{
 		
 
 		this.loadFirstLevel();
-		// this.loadSecondLevel();
+		// this.loadThirdLevel();
 		
 		
 
@@ -57,7 +57,9 @@ class Game{
 	addCustomGear(options){
 		options.verticies ||= [0,180];
 		options.rotationVel ||= 0;
-		options.rotationVelMax ||= 3;
+		if(options.rotationVelMax !== 0){
+			options.rotationVelMax = 3;
+		}
 		options.timeBufferThreshold ||= 150;
 		if(this.gears.length > 0){
 			options.counterClockwise ||= this.gears[this.gears.length - 1].counterClockwise ? false : true; 
@@ -291,19 +293,27 @@ class Game{
 			pos: [Game.DIM_X * 0.75, Game.DIM_Y - 100], vertices: [270], gearEngagable: false,
 			winningTile: true});
 		this.addCustomGear({vertices: [90, 270], gearEngagable: false});
-		this.addCustomGear({vertices: [90], gearEngagable: false, rotationVelMax:0});
+		this.addCustomGear({vertices: [90], gearEngagable: false, rotationVelMax: 0});
 		
 		this.player = new Player({game: this});
+
+		console.log(`max ${this.gears[5].rotationVelMax} | current ${this.gears[5].rotationVel}`)
 
 	}
 
 	checkThirdLevelEvents(){
 		if(this.currentGear === this.gears[2] && this.currentGear.rotationVel >= this.currentGear.rotationVelMax){
-			this.currentGear.rotationVel = 0;
+			this.gears[2].rotationVel = 0;
+			this.gears[2].currentAngle = 0;
 			this.player.pos = this.gears[5].pos.slice();
-			this.checkCurrentGear();
-			this.currentGear.rotationVel = 0;
-			this.currentGear.currentAngle = 0;
+			this.player.vel = [0,0];
+			// this.checkCurrentGear();
+			this.gears[5].rotationVel = 0;
+			this.gears[5].currentAngle = 0;
+			this.gears.forEach(gear => {
+				gear.rotationVel = 0;
+				gear.currentAngle = 0;
+			})
 
 		}
 	}
@@ -311,11 +321,14 @@ class Game{
 	loadFourthLevel(){
 		this.loadLevelReset();
 
-		this.addCustomGear({vertices: []});
+		this.addCustomGear({vertices: [270]});
+		this.addCustomGear({vertices: [], pos:[200, 420]});
+		this.addCustomGear({vertices: [], pos:[480, 350]});
+		this.addCustomGear({vertices: [], pos:[620, 250]});
 		// this.addCustomGear({vertices: [90, 270]});
 		// this.addCustomGear({vertices: [90, 270]});
 		// this.addCustomGear({vertices: [90]});
-		this.addCustomGear({vertices: [0, 90, 180, 270], pos:[480, 100]});
+		this.addCustomGear({vertices: [90], pos:[480, 100]});
 
 
 		this.player = new Player({game: this});

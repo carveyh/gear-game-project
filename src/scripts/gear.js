@@ -110,16 +110,16 @@ class Gear extends MovingObject{
 
 	gearAccel(){
 		// if(this.gearEngagable && this.rotationVel < this.rotationVelMax){
-		if(this.rotationVel <= this.rotationVelMax){
-			this.game.player.toggleEngage();
+		if(this.rotationVel < this.rotationVelMax){
+			// this.game.player.toggleEngage();
 			this.rotationVel += this.rotationAcc;
 		}
 	}
 
 	gearDecel(){
 		// if(this.gearEngagable && this.rotationVel > this.rotationVelMin){
-		if(this.rotationVel >= this.rotationVelMin){
-			this.game.player.toggleEngage();
+		if(this.rotationVel > this.rotationVelMin){
+			// this.game.player.toggleEngage();
 			this.rotationVel -= this.rotationAcc;
 		}
 
