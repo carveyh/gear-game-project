@@ -67,7 +67,9 @@ class GearPlatform extends MovingObject{
 
 			// THIS ACTUALLY CHECKS IF PLAYER IS ON
 			// let platformToPlatformJumpBuffer = 5;
-			let platformToPlatformJumpBuffer = 0;
+
+			// THIS MAY CAUSE ISSUES...BUT SMOOTHS OUT MOVEMENT / DECIMAL MATH?
+			let platformToPlatformJumpBuffer = 1;
 			// console.log(`platform angle: ${this.angle}`)
 			// console.log(`platform width: ${this.width}`)
 			// console.log(`platform depth: ${this.radius}`)

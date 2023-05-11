@@ -35,8 +35,9 @@ class Game{
 		this.levelNumber = 1;
 		this.levelOver = false;
 		this.transitionCountDown = 255;
+		this.levelTimer = 0; //for timing story events per level
 		
-		
+
 		this.loadFirstLevel();
 		// this.loadSecondLevel();
 		
@@ -56,6 +57,7 @@ class Game{
 	addCustomGear(options){
 		options.verticies ||= [0,180];
 		options.rotationVel ||= 0;
+		options.rotationVelMax ||= 3;
 		options.timeBufferThreshold ||= 150;
 		if(this.gears.length > 0){
 			options.counterClockwise ||= this.gears[this.gears.length - 1].counterClockwise ? false : true; 
@@ -84,9 +86,10 @@ class Game{
 				// rotationVel: 0.1,
 				rotationVel: options.rotationVel,
 				// rotationVelMin: 0,
-				rotationVelMax: 3,
+				rotationVelMax: options.rotationVelMax,
 				rotationVelMin: 0,
 				rotationAcc: 0.2,
+				gearEngagable: options.gearEngagable
 				
 		});
 		this.gears.push(gear);
@@ -119,7 +122,10 @@ class Game{
 			timeBufferThreshold: 150,
 			// timeBufferThreshold: 10,
 			timeBufferStep: 1,
-			timeBufferCurrent: 0, 
+			timeBufferCurrent: 0,
+			
+			gearEngagable: false,
+
 			currentAngle: 0,
 			rotationVelMax: 3,
 			rotationAcc: 0.2,
@@ -199,60 +205,129 @@ class Game{
 		this.gears.push(gear);
 	}
 
-	loadLevelTemplate(){
+	loadLevelReset(){
+		document.querySelector('body').style.backgroundColor = "white";
 		this.gears = [];
 		this.currentGear = Game.NULL_GEAR;
-		// Add generic gears
+
+		// Player class
+		// //Do this after setting up gear placements, since player will auto-center to first gear.
+		this.isPaused = false;
+		this.levelTimer = 0;
+		this.transitionCountDown = 255;
+	}
+
+	loadFirstLevel(){
+		this.loadLevelReset();
+
+		this.addCustomGear({vertices: [270], gearEngagable: false});
+		this.addCustomGear({vertices: [90, 270], gearEngagable: false});
+		this.addCustomGear({vertices: [90, 180, 270], gearEngagable: false});
+		this.addCustomGear({vertices: [90, 270], gearEngagable: false});
+		this.addCustomGear({vertices: [90, 270], gearEngagable: false});
+		this.addStationaryGear({winningTile: true, gearEngagable: false});
+		this.addCustomGear({pos:[400,340],vertices:[0,180], gearEngagable: false});
+
+		this.addCustomGear({
+			pos:[320,340],vertices: [0, 90, 180, 270],
+			timeBufferThreshold:1, gearEngagable: false
+		});
+		this.addCustomGear({
+			pos:[240,340],
+			vertices:[],
+			rotationVel:5,
+			timeBufferThreshold:70, gearEngagable: false
+		});
+
+		this.player = new Player({game: this});
+
+		this.levelOneText1 = [`Heyy!!!`, `Help!!!!`, `Forget the glowing yellow tile 0 heeeeelp!!`, `There must be something u can do...oh god`, `I'll tell you something good...I swear...pls...`];
+		this.levelOneText1approach = [];
+		this.levelOneText1leave = [];
+		this.levelOneText2 = [`Ohhh - oh thank god. I…I can’t talk right now. Just… No matter what you do…do not anger…The One...`];
+		this.levelOneText3 = [`Ohhh god not again-🤮`];
+
+		// this.kenny = new Player({game: this, color: 'darkgreen', pos: [241,342]});
+
+	}
+
+	checkFirstLevelEvents(){
+		this.levelTimer += 1;
+		// //wait x seconds after first page load
+		// //cycle thru levelOneText1 strings per (i..j) *Math.random() seconds
+			// //if player steps within stationary platform, "approach" text - cycle more frequently `there must be something u can do`
+			// //if player walks away without interacting, "leave" text
+			// //if player interacts and gear speed goes to 0, levelOneText2
+				// //if player speeds up again, levelOneText3
+
+
+	}
+
+	loadSecondLevel(){
+		this.loadLevelReset();
+
 		this.addGear();
 		this.addGear();
 		this.addGear();
 		this.addGear();
 		this.addGear();
 		this.addStationaryGear({winningTile: true});
-		
-		
-		// Player class
-		this.player = new Player({game: this});
-		this.isPaused = false;
-	}
-
-	loadFirstLevel(){
-		this.gears = [];
-		this.currentGear = Game.NULL_GEAR;
-
-		this.addCustomGear({vertices: [270]});
-		this.addCustomGear({vertices: [90, 270]});
-		this.addCustomGear({vertices: [90, 180, 270]});
-		this.addCustomGear({vertices: [90, 270]});
-		this.addCustomGear({vertices: [90, 270]});
-		this.addStationaryGear({winningTile: true, color: `orange`});
-		this.addStationaryGear({pos:[400,340]});
-		this.addCustomGear({
-			pos:[320,340],vertices: [0, 90, 180, 270],
-			timeBufferThreshold:1
-		});
-		this.addCustomGear({
-			pos:[240,340],
-			vertices:[],
-			rotationVel:5,
-			timeBufferThreshold:1
-		});
 
 		this.player = new Player({game: this});
-		this.isPaused = false;
+		
+		// this.kenny = new Player();
+	}
+	
+	loadThirdLevel(){
+		this.loadLevelReset();
+
+		this.addCustomGear({
+			pos: [Game.DIM_X * 0.25, Game.DIM_Y - 100], vertices: [270], gearEngagable: false
+		});
+		this.addCustomGear({vertices: [90, 270], gearEngagable: false});
+		this.addCustomGear({vertices: [90], gearEngagable: false});
+
+		this.addStationaryGear({
+			pos: [Game.DIM_X * 0.75, Game.DIM_Y - 100], vertices: [270], gearEngagable: false,
+			winningTile: true});
+		this.addCustomGear({vertices: [90, 270], gearEngagable: false});
+		this.addCustomGear({vertices: [90], gearEngagable: false, rotationVelMax:0});
+		
+		this.player = new Player({game: this});
+
 	}
 
-	loadSecondLevel(){
-		this.loadLevelTemplate();
+	checkThirdLevelEvents(){
+		if(this.currentGear === this.gears[2] && this.currentGear.rotationVel >= this.currentGear.rotationVelMax){
+			this.currentGear.rotationVel = 0;
+			this.player.pos = this.gears[5].pos.slice();
+			this.checkCurrentGear();
+			this.currentGear.rotationVel = 0;
+			this.currentGear.currentAngle = 0;
+
+		}
+	}
+
+	loadFourthLevel(){
+		this.loadLevelReset();
+
+		this.addCustomGear({vertices: []});
+		// this.addCustomGear({vertices: [90, 270]});
+		// this.addCustomGear({vertices: [90, 270]});
+		// this.addCustomGear({vertices: [90]});
+		this.addCustomGear({vertices: [0, 90, 180, 270], pos:[480, 100]});
+
+
+		this.player = new Player({game: this});
 	}
 
 	levelTransitionOut(){
 		// Simple gradual color fill of canvas that fades out screen and fades it back in with new elements loaded.
 		let canvas = document.querySelector('#game-canvas');
 		let ctx = canvas.getContext('2d');
-		ctx.fillStyle = `rgb(${this.transitionCountDown},${this.transitionCountDown},255)`;
-		ctx.fillRect(0,0,Game.DIM_X,Game.DIM_Y);
-		console.log(this.transitionCountDown);
+		// ctx.fillStyle = `rgb(${this.transitionCountDown},${this.transitionCountDown},255)`;
+		// ctx.fillRect(0,0,Game.DIM_X,Game.DIM_Y);
+		// console.log(this.transitionCountDown);
 		// document.querySelector('#spoilers').style.color = `rgb(${this.blueCountdown},${this.blueCountdown},255)`;
 		document.querySelector('#game-canvas').style.borderColor = `rgb(${this.transitionCountDown},${this.transitionCountDown},255)`;
 		if(this.transitionCountDown-- > 0) {
@@ -279,9 +354,23 @@ class Game{
 			case 2:
 				if(this.player.pos[1] < 145){
 					this.levelTransitionOut();
-					// this.levelNumber +=1;
-					this.loadSecondLevel();
-
+					this.levelNumber +=1;
+					this.loadThirdLevel();
+				}
+				break;
+			case 3:
+				if((this.player.pos[0] > 600) && (this.player.pos[1] > 459)){
+					this.levelTransitionOut();
+					this.levelNumber +=1;
+					this.loadFourthLevel();
+				}
+				break;
+			case 4:
+				if(this.player.pos[1] < 145){
+					console.log("level over!")
+					this.levelTransitionOut();
+					this.levelNumber = 1;
+					this.loadFirstLevel();
 				}
 				break;
 		}
@@ -381,7 +470,23 @@ class Game{
 
 		this.getAllObjects().forEach(obj => {
 			obj.draw(ctx);
+			// //Level design coding...refactor later!
+			ctx.fillStyle = `RGB(198,81,2)`;
+			if(this.levelNumber === 1 && obj == this.gears[6]){
+				ctx.fillRect(360, 300, 80,80);
+			}
+			if(this.levelNumber === 3 && obj == this.gears[0]){
+				ctx.fillRect(this.gears[0].pos[0]-40, this.gears[0].pos[1]-40, 80,80);
+			}
+			if(this.levelNumber === 3 && obj == this.gears[1]){
+				ctx.fillRect(this.gears[1].pos[0]-40, this.gears[1].pos[1]-40, 80,80);
+			}
+			if(this.levelNumber === 3 && obj == this.gears[4]){
+				ctx.fillRect(this.gears[4].pos[0]-40, this.gears[4].pos[1]-40, 80,80);
+			}
 		});
+
+		
 	}
 
 	drawGameBackground(ctx){
@@ -413,6 +518,7 @@ class Game{
 		.concat(this.generics)
 		.concat(this.gears)
 		.concat([this.player])
+		// .concat([this.kenny])
 		;
 	}
 
@@ -426,6 +532,7 @@ class Game{
 	getAllLiveObjects(){
 		return []
 		.concat([this.player])
+		// .concat([this.kenny])
 		;
 	}
 
@@ -496,6 +603,7 @@ class Game{
 	}
 
 	step(timeDelta){
+			// console.log(this.kenny.pos);
 		// if(!this.levelOver){
 			// invokes moveObjects and checkCollisions
 	
@@ -518,6 +626,17 @@ class Game{
 			// this.levelTransitionOut();
 			// this.pause();
 		// }
+
+			// //Check level specific events
+			switch(this.levelNumber){
+				case 1:
+					this.checkFirstLevelEvents();
+					break;
+				case 3:
+					this.checkThirdLevelEvents();
+					console.log(`vel ${this.currentGear.rotationVel} velMax ${this.currentGear.rotationVelMax}`)
+					break;
+			}
 	}
 
 
