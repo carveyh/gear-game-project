@@ -38,6 +38,7 @@ class Game{
 		
 		
 		this.loadFirstLevel();
+		// this.loadSecondLevel();
 		
 		
 
@@ -48,11 +49,47 @@ class Game{
 	static BGCOLOR = "pink";
 
 
+	firstGearLocation(){
+		return [Game.DIM_X / 2, Game.DIM_Y - 100];
+	}
 
-	addGenericObj(){
-		this.generics.push(
-			new MovingObject({game: this})
-		)
+	addCustomGear(options){
+		options.verticies ||= [0,180];
+		options.rotationVel ||= 0;
+		options.timeBufferThreshold ||= 150;
+		if(this.gears.length > 0){
+			options.counterClockwise ||= this.gears[this.gears.length - 1].counterClockwise ? false : true; 
+			let prevGear = this.gears[this.gears.length - 1];
+			let prevPos = prevGear.pos;
+			let prevRad = prevGear.radius;
+			options.pos ||= [prevPos[0], prevPos[1] - (prevRad * 2)];
+		} else {
+			options.counterClockwise = false;
+			options.pos ||= this.firstGearLocation();
+		}
+
+		let gear = new Gear({
+				game: this,
+				pos: options.pos,
+				vel: [0,0],
+				radius: 40,
+				color: "gray",
+				counterClockwise: options.counterClockwise,
+				platformWidth: 30,
+				timeBufferThreshold: options.timeBufferThreshold,
+				timeBufferStep: 1,
+				timeBufferCurrent: 0,
+				vertices: options.vertices,
+				currentAngle: 0,
+				// rotationVel: 0.1,
+				rotationVel: options.rotationVel,
+				// rotationVelMin: 0,
+				rotationVelMax: 3,
+				rotationVelMin: 0,
+				rotationAcc: 0.2,
+				
+		});
+		this.gears.push(gear);
 	}
 
 	addGear(){
@@ -104,7 +141,10 @@ class Game{
 		this.gears.push(gear);
 	}
 
-	addStationaryGear(){
+	addStationaryGear(options){
+		if(options){
+			options.color ||= `#0e1a24`;
+		}
 		let newPos;
 		let newRadius;
 		let newCounterClockWise;
@@ -121,7 +161,13 @@ class Game{
 			newCounterClockWise = !prevGear.counterClockwise;
 		}
 
+		if(options && options.pos){
+			newPos = options.pos;
+		}
+
 		let gear = new StationaryGear({
+			winningTile: options.winningTile,
+			color: options.color,
 			pos: newPos,
 			radius: newRadius,
 			counterClockwise: newCounterClockWise,
@@ -153,7 +199,7 @@ class Game{
 		this.gears.push(gear);
 	}
 
-	loadFirstLevel(){
+	loadLevelTemplate(){
 		this.gears = [];
 		this.currentGear = Game.NULL_GEAR;
 		// Add generic gears
@@ -162,13 +208,42 @@ class Game{
 		this.addGear();
 		this.addGear();
 		this.addGear();
-		this.addStationaryGear();
+		this.addStationaryGear({winningTile: true});
 		
 		
 		// Player class
 		this.player = new Player({game: this});
 		this.isPaused = false;
+	}
 
+	loadFirstLevel(){
+		this.gears = [];
+		this.currentGear = Game.NULL_GEAR;
+
+		this.addCustomGear({vertices: [270]});
+		this.addCustomGear({vertices: [90, 270]});
+		this.addCustomGear({vertices: [90, 180, 270]});
+		this.addCustomGear({vertices: [90, 270]});
+		this.addCustomGear({vertices: [90, 270]});
+		this.addStationaryGear({winningTile: true, color: `orange`});
+		this.addStationaryGear({pos:[400,340]});
+		this.addCustomGear({
+			pos:[320,340],vertices: [0, 90, 180, 270],
+			timeBufferThreshold:1
+		});
+		this.addCustomGear({
+			pos:[240,340],
+			vertices:[],
+			rotationVel:5,
+			timeBufferThreshold:1
+		});
+
+		this.player = new Player({game: this});
+		this.isPaused = false;
+	}
+
+	loadSecondLevel(){
+		this.loadLevelTemplate();
 	}
 
 	levelTransitionOut(){
@@ -187,15 +262,30 @@ class Game{
 		}
 	}
 
-	levelTransitionIn(){
-		// Add later.
-	}
+	// levelTransitionIn(){
+	// 	// Add later.
+	// }
 
 	checkLevelOver(){
-		if(this.player.pos[1] > Game.DIM_Y){
-			console.log("level over!")
-			this.levelTransitionOut();
+		switch(this.levelNumber){
+			case 1:
+				if(this.player.pos[1] < 145){
+					console.log("level over!")
+					this.levelTransitionOut();
+					this.levelNumber += 1;
+					this.loadSecondLevel();
+				}
+				break;
+			case 2:
+				if(this.player.pos[1] < 145){
+					this.levelTransitionOut();
+					// this.levelNumber +=1;
+					this.loadSecondLevel();
+
+				}
+				break;
 		}
+		
 	}
 
 	// Async functions to help with showing a screen transition
@@ -352,11 +442,28 @@ class Game{
 	}
 
 	gearAccel(){
-		this.currentGear.gearAccel();
+		switch(this.levelNumber){
+			case 1:
+				this.gears[8].gearAccel();
+				this.gears[7].gearAccel();
+				break;
+			default:
+				this.currentGear.gearAccel();
+				break;
+		}
+		
 	}
 
 	gearDecel(){
-		this.currentGear.gearDecel();
+		switch(this.levelNumber){
+			case 1:
+				this.gears[8].gearDecel();
+				this.gears[7].gearDecel();
+				break;
+			default:
+				this.currentGear.gearDecel();
+				break;
+		}
 	}
 
 	// //Deprecating into (1) moveBackgroundObjects then (2) moveLiveObjects
@@ -389,7 +496,7 @@ class Game{
 	}
 
 	step(timeDelta){
-		if(!this.levelOver){
+		// if(!this.levelOver){
 			// invokes moveObjects and checkCollisions
 	
 			// //Step 1a: move background objs; Step 1b: checks collisions
@@ -407,10 +514,10 @@ class Game{
 	
 			// //Did the level end?
 			this.checkLevelOver();
-		} else {
-			this.levelTransitionOut();
-			this.pause();
-		}
+		// } else {
+			// this.levelTransitionOut();
+			// this.pause();
+		// }
 	}
 
 
