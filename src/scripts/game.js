@@ -4,6 +4,7 @@ import Gear from "./gear.js";
 import NullGear from "./null_gear.js";
 import GearPlatform from "./gear_platform.js";
 import NullPlatform from "./null_platform.js";
+import StationaryGear from "./stationary_gear.js";
 
 class Game{
 
@@ -35,14 +36,14 @@ class Game{
 		this.addGear();
 		this.addGear();
 		this.addGear();
-		this.addGear();
+		this.addStationaryGear();
+
+		this.loadFirstLevel();
 
 		// Player class
 		this.player = new Player({game: this});
-
 		this.isPaused = false;
 
-		// this.addGenericObj();
 
 		// Images
 		this.gearShiny = new Image();
@@ -52,6 +53,10 @@ class Game{
 	static DIM_X = 960;
 	static DIM_Y = 600;
 	static BGCOLOR = "pink";
+
+	loadFirstLevel(){
+		
+	}
 
 	addGenericObj(){
 		this.generics.push(
@@ -64,7 +69,7 @@ class Game{
 		let newRadius;
 		let newCounterClockWise;
 		if(this.gears.length === 0){
-			newRadius = 60;
+			newRadius = 40;
 			newPos = [Game.DIM_X / 2, Game.DIM_Y - 100];
 			newCounterClockWise = false;
 		} else {
@@ -77,6 +82,55 @@ class Game{
 		}
 
 		let gear = new Gear({
+			pos: newPos,
+			radius: newRadius,
+			counterClockwise: newCounterClockWise,
+			vel: [0,0],
+			// radius: 60,
+			game: this,
+			timeBufferThreshold: 150,
+			// timeBufferThreshold: 10,
+			timeBufferStep: 1,
+			timeBufferCurrent: 0, 
+			currentAngle: 0,
+			rotationVelMax: 3,
+			rotationAcc: 0.2,
+			rotationVel: 5,
+			rotationVel: 0.5,
+			rotationVel: 0.1,
+			// rotationVel: 0.05,
+			// rotationVel: 0.01,
+			// rotationVel: 0,
+			platformWidth: 30,
+			// vertices: [0,45,90,135,180, 270]
+			// vertices: [0, 60, 180, 270]
+			// vertices: [45, 90, 225, 270]
+			// vertices: [45, 90, 157.5, 225, 270, 337.5]
+			// vertices: [0,180]
+			vertices: [0,115,245]
+		});
+
+		this.gears.push(gear);
+	}
+
+	addStationaryGear(){
+		let newPos;
+		let newRadius;
+		let newCounterClockWise;
+		if(this.gears.length === 0){
+			newRadius = 40;
+			newPos = [Game.DIM_X / 2, Game.DIM_Y - 100];
+			newCounterClockWise = false;
+		} else {
+			let prevGear = this.gears[this.gears.length - 1];
+			let prevPos = this.gears[this.gears.length - 1].pos;
+			let prevRad = this.gears[this.gears.length - 1].radius;
+			newPos = [prevPos[0], prevPos[1] - (prevRad * 2)];
+			newRadius = prevRad;
+			newCounterClockWise = !prevGear.counterClockwise;
+		}
+
+		let gear = new StationaryGear({
 			pos: newPos,
 			radius: newRadius,
 			counterClockwise: newCounterClockWise,
@@ -238,6 +292,10 @@ class Game{
 			allPlatforms = allPlatforms.concat(gear.gearPlatforms);
 		})
 		return allPlatforms;
+	}
+
+	gearDirFlip(){
+		this.currentGear.gearDirFlip();
 	}
 
 	gearAccel(){

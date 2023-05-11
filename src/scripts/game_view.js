@@ -66,14 +66,20 @@ class GameView{
 				// Placeholder
 			}
 			// Consider switch / case?
-			if(key === 'u'){
+			if(key === 'i'){
 				this.game.gearAccel();
 			}
-			if(key === 'o'){
+			if(key === 'u'){
 				this.game.gearDecel();
 			}
-			if(key === ' '){
+			if(key === 'p'){
 				this.game.isPaused = !this.game.isPaused;
+			}
+			if(key === 'o'){
+				this.game.gearDirFlip();
+			}
+			if(key === ' '){
+				this.game.currentGear.toggleEngage();
 			}
 		})
 	}

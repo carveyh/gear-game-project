@@ -35,6 +35,9 @@ class Gear extends MovingObject{
 		this.ringGlowIncrement = 0.03;
 		this.ringGlowMax = 1;
 
+		this.gearEngaged = false;
+		this.gearEngagable = true;
+
 		this.generatePlatforms();
 	}
 
@@ -56,11 +59,34 @@ class Gear extends MovingObject{
 		});
 	}
 
-	gearAccel(){
+	toggleEngage(){
+		if(Util.distance(this.game.player.pos, this.pos) < this.platformWidth / 2){
+			this.gearEngaged = !this.gearEngaged;
+			if(this.gearEngaged){
+				// this.game.player.pos = this.pos;
+				this.pos = this.game.player.pos;
+			} else {
+				this.pos = this.game.player.pos.slice();
+			}
+		}
+	}
 
+	gearDirFlip(){
+		this.counterClockwise = !this.counterClockwise;
+	}
+
+	gearAccel(){
+		if(this.gearEngagable && this.rotationVel < this.rotationVelMax){
+			this.game.player.toggleEngage();
+			this.rotationVel += this.rotationAcc;
+		}
 	}
 
 	gearDecel(){
+		if(this.gearEngagable && this.rotationVel > this.rotationVelMin){
+			this.game.player.toggleEngage();
+			this.rotationVel -= this.rotationAcc;
+		}
 
 	}
 
@@ -71,7 +97,7 @@ class Gear extends MovingObject{
 		ctx.rotate(Util.radians(this.currentAngle));
 
 		// //Draw Gear canvas basic shape
-		// this.drawGearSilhouette(ctx);
+		this.drawGearSilhouette(ctx);
 
 		// //Draw outline of gear if player is standing on it
 		this.drawGearOutline(ctx);
@@ -210,9 +236,9 @@ class Gear extends MovingObject{
 
 
 		// //DISPLAY ANGLE OF EACH PLATFORM
-		ctx.font = "20px Arial";
-		ctx.fillStyle = "rgb(150,150,150)";
-		ctx.fillText(`  ${platform.angle}`, platform.radius, 5)
+		// ctx.font = "20px Arial";
+		// ctx.fillStyle = "rgb(150,150,150)";
+		// ctx.fillText(`  ${platform.angle}`, platform.radius, 5)
 		ctx.rotate(Util.radians(platform.angle) * -1);
 
 		// this.displayCoords(ctx);

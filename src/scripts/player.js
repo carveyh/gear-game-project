@@ -27,21 +27,26 @@ class Player extends MovingObject{
 		spawnGear.player = this;
 		this.speedMultiplier = Player.SPEED_MULTIPLIER;
 		this.oldPos = this.pos;
+		this.playerEngaged = false;
 	}
 
 	// static SPEED_MULTIPLIER = 3.5;
-	static SPEED_MULTIPLIER = 2.5;
-	// static SPEED_MULTIPLIER = 2;
+	// static SPEED_MULTIPLIER = 2.5;
+	static SPEED_MULTIPLIER = 2;
 	// static SPEED_MULTIPLIER = 1.5;
 	// static SPEED_MULTIPLIER = 0.5;
 	static COLOR = "red";
 
 	customDraw(ctx){
-
+		
 	}
 
 	customMove(timeDelta){
 
+	}
+
+	toggleEngage(){
+		this.playerEngaged = !this.playerEngaged;
 	}
 
 	unMoveAndStop(timeDelta){
