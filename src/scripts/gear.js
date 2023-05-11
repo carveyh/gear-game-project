@@ -36,7 +36,10 @@ class Gear extends MovingObject{
 		this.ringGlowMax = 1;
 
 		this.gearEngaged = false;
-		this.gearEngagable = true;
+		this.gearEngagable = options.gearEngagable;
+		if(this.gearEngagable === null || this.gearEngagable === undefined){
+			this.gearEngagable = true;
+		}
 
 		this.blueCountdown = 255;
 		this.oldCanvasBorder = document.querySelector('#game-canvas').style.border;
@@ -64,9 +67,10 @@ class Gear extends MovingObject{
 
 	toggleEngage(){
 		// //Only activate if player is around the center, and check if this gear is current gear. Also gear must be "driveable" or is gearEngagable.
-		if(this.game.currentGear === this 
-			&& Util.distance(this.game.player.pos, this.pos) < this.platformWidth / 2
-			&& this.gearEngagable
+		if(
+			(this.game.currentGear === this) 
+			&& (Util.distance(this.game.player.pos, this.pos) < this.platformWidth / 2)
+			&& (this.gearEngagable)
 			){
 			this.gearEngaged = !this.gearEngaged;
 			if(this.gearEngaged){
@@ -105,14 +109,16 @@ class Gear extends MovingObject{
 	}
 
 	gearAccel(){
-		if(this.gearEngagable && this.rotationVel < this.rotationVelMax){
+		// if(this.gearEngagable && this.rotationVel < this.rotationVelMax){
+		if(this.rotationVel <= this.rotationVelMax){
 			this.game.player.toggleEngage();
 			this.rotationVel += this.rotationAcc;
 		}
 	}
 
 	gearDecel(){
-		if(this.gearEngagable && this.rotationVel > this.rotationVelMin){
+		// if(this.gearEngagable && this.rotationVel > this.rotationVelMin){
+		if(this.rotationVel >= this.rotationVelMin){
 			this.game.player.toggleEngage();
 			this.rotationVel -= this.rotationAcc;
 		}
@@ -148,11 +154,11 @@ class Gear extends MovingObject{
 			ctx.fill();
 			ctx.closePath();
 
-			ctx.beginPath();
-			// ctx.lineWidth = 8;
-			ctx.font = `50px Verdana`;
-			ctx.fillText("🤢",-5,-5,50);
-			ctx.closePath();
+			// ctx.beginPath();
+			// // ctx.lineWidth = 8;
+			// ctx.font = `50px Verdana`;
+			// ctx.fillText("🤢",-5,-5,50);
+			// ctx.closePath();
 		}
 
 		// //Revert translation and rotation to canvas origin
