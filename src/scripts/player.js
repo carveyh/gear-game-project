@@ -10,7 +10,7 @@ class Player extends MovingObject{
 
 		// //Now...we initialize player location to the same as first gear of the level.
 		const spawnGear = options.game.gears[0];
-		options.pos = spawnGear.pos.slice();
+		options.pos ||= spawnGear.pos.slice();
 		
 		// //Let's start player on a platform. Without this, it's actually standing on a deadzone (likely a pixel) right at the center of a gear.
 		// //BUT this looks sloppy when you first load the game...the player position is being rotated about the center point

@@ -140,12 +140,41 @@ class Gear extends MovingObject{
 		// //Draw floating text (optional)
 		this.drawFloatText(ctx);
 
+		// //DEMO PURPOSES ONLY: DRAW KENNY
+		if(this.game.levelNumber === 1 && this.game.gears[this.game.gears.length - 1] === this){
+			ctx.beginPath();
+			ctx.fillStyle = "darkgreen";
+			ctx.arc(1, 1, 10, 0, 2 * Math.PI, true);
+			ctx.fill();
+			ctx.closePath();
+
+			ctx.beginPath();
+			// ctx.lineWidth = 8;
+			ctx.font = `50px Verdana`;
+			ctx.fillText("🤢",-5,-5,50);
+			ctx.closePath();
+		}
+
 		// //Revert translation and rotation to canvas origin
 		ctx.restore();
+
+		// //DRAW QUOTE LINE - DEMO KENNY
+		this.drawQuoteLine(ctx);
 
 		// //LEVEL DESIGN HELPER
 		// this.displayCoords(ctx);
 
+	}
+
+	drawQuoteLine(ctx){
+		// // //DEMO KENNY
+		// ctx.beginPath();
+		// ctx.strokeStyle = "black";
+		// ctx.lineWidth = 3;
+		// ctx.moveTo(230,400);
+		// ctx.lineTo(260,440);
+		// ctx.stroke();
+		// ctx.closePath();
 	}
 
 	drawFloatText(ctx){

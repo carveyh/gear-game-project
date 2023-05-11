@@ -226,7 +226,8 @@ class Game{
 		this.addCustomGear({vertices: [90, 270]});
 		this.addCustomGear({vertices: [90, 270]});
 		this.addStationaryGear({winningTile: true, color: `orange`});
-		this.addStationaryGear({pos:[400,340]});
+		this.addCustomGear({pos:[400,340],vertices:[0,180]});
+
 		this.addCustomGear({
 			pos:[320,340],vertices: [0, 90, 180, 270],
 			timeBufferThreshold:1
@@ -235,15 +236,19 @@ class Game{
 			pos:[240,340],
 			vertices:[],
 			rotationVel:5,
-			timeBufferThreshold:1
+			timeBufferThreshold:150
 		});
 
 		this.player = new Player({game: this});
 		this.isPaused = false;
+
+		// this.kenny = new Player({game: this, color: 'darkgreen', pos: [241,342]});
+
 	}
 
 	loadSecondLevel(){
 		this.loadLevelTemplate();
+		// this.kenny = new Player();
 	}
 
 	levelTransitionOut(){
@@ -381,7 +386,14 @@ class Game{
 
 		this.getAllObjects().forEach(obj => {
 			obj.draw(ctx);
+			// //Level design coding...refactor later!
+			if(this.levelNumber === 1 && obj == this.gears[6]){
+				ctx.fillStyle = `#0e1a24`;
+				ctx.fillRect(360, 300, 80,80);
+			}
 		});
+
+		
 	}
 
 	drawGameBackground(ctx){
@@ -413,6 +425,7 @@ class Game{
 		.concat(this.generics)
 		.concat(this.gears)
 		.concat([this.player])
+		// .concat([this.kenny])
 		;
 	}
 
@@ -426,6 +439,7 @@ class Game{
 	getAllLiveObjects(){
 		return []
 		.concat([this.player])
+		// .concat([this.kenny])
 		;
 	}
 
@@ -496,6 +510,7 @@ class Game{
 	}
 
 	step(timeDelta){
+			// console.log(this.kenny.pos);
 		// if(!this.levelOver){
 			// invokes moveObjects and checkCollisions
 	
