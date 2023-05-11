@@ -55,6 +55,8 @@ class Game{
 
 	addCustomGear(options){
 		options.verticies ||= [0,180];
+		options.rotationVel ||= 0;
+		options.timeBufferThreshold ||= 150;
 		if(this.gears.length > 0){
 			options.counterClockwise ||= this.gears[this.gears.length - 1].counterClockwise ? false : true; 
 			let prevGear = this.gears[this.gears.length - 1];
@@ -74,15 +76,16 @@ class Game{
 				color: "gray",
 				counterClockwise: options.counterClockwise,
 				platformWidth: 30,
-				timeBufferThreshold: 150,
+				timeBufferThreshold: options.timeBufferThreshold,
 				timeBufferStep: 1,
-				timeBufferStep: 0,
+				timeBufferCurrent: 0,
 				vertices: options.vertices,
 				currentAngle: 0,
 				// rotationVel: 0.1,
-				rotationVel: 0,
+				rotationVel: options.rotationVel,
 				// rotationVelMin: 0,
 				rotationVelMax: 3,
+				rotationVelMin: 0,
 				rotationAcc: 0.2,
 				
 		});
@@ -219,8 +222,16 @@ class Game{
 		this.addCustomGear({vertices: [90, 270]});
 		this.addStationaryGear();
 		this.addStationaryGear({pos:[400,340]});
-		this.addCustomGear({pos:[320,340],vertices: [0, 90, 180, 270]});
-		this.addCustomGear({pos:[240,340],vertices: []});
+		this.addCustomGear({
+			pos:[320,340],vertices: [0, 90, 180, 270],
+			timeBufferThreshold:1
+		});
+		this.addCustomGear({
+			pos:[240,340],
+			vertices:[],
+			rotationVel:5,
+			timeBufferThreshold:1
+		});
 
 		this.player = new Player({game: this});
 		this.isPaused = false;
@@ -259,8 +270,9 @@ class Game{
 					this.levelNumber += 1;
 					this.loadSecondLevel();
 				}
+				break;
 			case 2:
-				
+				break;
 		}
 		
 	}
@@ -419,11 +431,28 @@ class Game{
 	}
 
 	gearAccel(){
-		this.currentGear.gearAccel();
+		switch(this.levelNumber){
+			case 1:
+				this.gears[8].gearAccel();
+				this.gears[7].gearAccel();
+				break;
+			default:
+				this.currentGear.gearAccel();
+				break;
+		}
+		
 	}
 
 	gearDecel(){
-		this.currentGear.gearDecel();
+		switch(this.levelNumber){
+			case 1:
+				this.gears[8].gearDecel();
+				this.gears[7].gearDecel();
+				break;
+			default:
+				this.currentGear.gearDecel();
+				break;
+		}
 	}
 
 	// //Deprecating into (1) moveBackgroundObjects then (2) moveLiveObjects

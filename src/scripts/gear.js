@@ -96,6 +96,7 @@ class Gear extends MovingObject{
 		if(this.blueCountdown-- > 0) {
 			setTimeout(this.fadePageToBlue.bind(this), 1, this.blueCountdown)
 		} else {
+			// this.blueCountdown = 255;
 		}
 	}
 
