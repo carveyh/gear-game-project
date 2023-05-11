@@ -57,6 +57,7 @@ class Game{
 	addCustomGear(options){
 		options.verticies ||= [0,180];
 		options.rotationVel ||= 0;
+		options.radius ||= 40;
 		if(options.rotationVelMax !== 0){
 			options.rotationVelMax = 3;
 		}
@@ -76,7 +77,7 @@ class Game{
 				game: this,
 				pos: options.pos,
 				vel: [0,0],
-				radius: 40,
+				radius: options.radius,
 				color: "gray",
 				counterClockwise: options.counterClockwise,
 				platformWidth: 30,
@@ -221,6 +222,7 @@ class Game{
 
 	loadFirstLevel(){
 		this.loadLevelReset();
+		this.levelNumber = 1;
 
 		this.addCustomGear({vertices: [270], gearEngagable: false});
 		this.addCustomGear({vertices: [90, 270], gearEngagable: false});
@@ -334,6 +336,15 @@ class Game{
 		this.player = new Player({game: this});
 	}
 
+	loadFifthLevel(){
+		this.levelNumber = 5;
+		this.loadLevelReset();
+
+		this.addCustomGear({radius: 80, rotationVel: 0.5, vertices: [0,160,180,205], pos:[Game.DIM_X / 3, Game.DIM_Y / 2]});
+
+		this.player = new Player({game: this});
+	}
+
 	levelTransitionOut(){
 		// Simple gradual color fill of canvas that fades out screen and fades it back in with new elements loaded.
 		let canvas = document.querySelector('#game-canvas');
@@ -382,8 +393,8 @@ class Game{
 				if(this.player.pos[1] < 145){
 					console.log("level over!")
 					this.levelTransitionOut();
-					this.levelNumber = 1;
-					this.loadFirstLevel();
+					this.levelNumber += 1;
+					this.loadFifthLevel();
 				}
 				break;
 		}
@@ -486,16 +497,36 @@ class Game{
 			// //Level design coding...refactor later!
 			ctx.fillStyle = `RGB(198,81,2)`;
 			if(this.levelNumber === 1 && obj == this.gears[6]){
-				ctx.fillRect(360, 300, 80,80);
+				// ctx.fillRect(360, 300, 80,80);
+				ctx.roundRect(360, 300, 80,80, [40]);
+				ctx.beginPath();
+				ctx.arc(400,340,45,0,2*Math.PI,false)
+				ctx.fill();
+				ctx.closePath();
 			}
 			if(this.levelNumber === 3 && obj == this.gears[0]){
-				ctx.fillRect(this.gears[0].pos[0]-40, this.gears[0].pos[1]-40, 80,80);
+				// ctx.fillRect(this.gears[0].pos[0]-40, this.gears[0].pos[1]-40, 80,80);
+				// ctx.roundRect(this.gears[0].pos[0]-40, this.gears[0].pos[1]-40, 80,80, [40]);
+				ctx.beginPath();
+				ctx.arc(this.gears[0].pos[0],this.gears[0].pos[1],45,0,2*Math.PI,false)
+				ctx.fill();
+				ctx.closePath();
 			}
 			if(this.levelNumber === 3 && obj == this.gears[1]){
-				ctx.fillRect(this.gears[1].pos[0]-40, this.gears[1].pos[1]-40, 80,80);
+				// ctx.fillRect(this.gears[1].pos[0]-40, this.gears[1].pos[1]-40, 80,80);
+				// ctx.roundRect(this.gears[1].pos[0]-40, this.gears[1].pos[1]-40, 80,80, [40]);
+				ctx.beginPath();
+				ctx.arc(this.gears[1].pos[0],this.gears[1].pos[1],45,0,2*Math.PI,false)
+				ctx.fill();
+				ctx.closePath();
 			}
 			if(this.levelNumber === 3 && obj == this.gears[4]){
-				ctx.fillRect(this.gears[4].pos[0]-40, this.gears[4].pos[1]-40, 80,80);
+				// ctx.fillRect(this.gears[4].pos[0]-40, this.gears[4].pos[1]-40, 80,80);
+				// ctx.roundRect(this.gears[4].pos[0]-40, this.gears[4].pos[1]-40, 80,80, [40]);
+				ctx.beginPath();
+				ctx.arc(this.gears[4].pos[0],this.gears[4].pos[1],45,0,2*Math.PI,false)
+				ctx.fill()
+				ctx.closePath();
 			}
 		});
 

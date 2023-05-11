@@ -300,6 +300,33 @@ class Gear extends MovingObject{
 		}
 
 
+		if(this.game.levelNumber === 5){
+			let linkText;
+			console.log(`${platform.angle}`)
+			switch(platform.angle){
+				case 0:
+					ctx.font = "40px Arial";
+					ctx.fillStyle = "rgb(0,120,255,1)";	
+					linkText = "Thanks for playing!";
+					break;
+				case 160:
+					ctx.font = "18px Arial";
+					ctx.fillStyle = "rgb(255,0,0,0.9)";
+					linkText = "linkedin.com/in/carvey-hor";
+					break;
+				case 180:
+					ctx.font = "22px Arial";
+					ctx.fillStyle = "rgb(255,0,0,0.9)";
+					linkText = "github.com/carveyh";
+					break;
+				case 205:
+					ctx.font = "27px Arial";
+					ctx.fillStyle = "rgb(255,0,0,1)";
+					linkText = "[r]eplay";
+					break;
+			}
+			ctx.fillText(`  ${linkText}`, platform.radius, 5)	
+		}
 
 		// //DISPLAY ANGLE OF EACH PLATFORM
 		// ctx.font = "20px Arial";

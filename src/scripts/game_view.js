@@ -81,6 +81,9 @@ class GameView{
 			if(key === ' '){
 				this.game.currentGear.toggleEngage();
 			}
+			if(key === 'r' && this.game.levelNumber === 5){
+				this.game.loadFirstLevel();
+			}
 		})
 	}
 }
