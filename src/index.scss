@@ -4,7 +4,9 @@
 // //Apply a reset.css
 
 header {
+	padding-top:15px;
 	padding-right: 50px;
+	padding-left: 50px;
 	font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 	display: flex;
 	flex-direction: column;
@@ -19,10 +21,13 @@ header {
 
 
 header h1 {
-	padding:0;margin:0;border:0;
+	font-size: 20px;
+
 }
 
 .header-row {
+	// padding: 10px;
+	padding-bottom: 10px;
 	display: flex;
 	flex-direction: row;
 	justify-content: flex-end;
@@ -32,10 +37,11 @@ header h1 {
 	display: flex;
 	flex-direction: row;
 	justify-content: flex-end;
+	
 }
 
 .header-row ul li {
-	margin: 0px, 5px;
+	padding: 0px 5px;
 	display: flex;
 	flex-direction: row;
 	justify-content: flex-end;
@@ -45,6 +51,25 @@ header h1 {
 	width: auto;
 	height: 25px;
 }
+
+#game-dialogue {
+	height: 25px;
+	display: flex;
+	font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+	flex-direction: row;
+	margin: 5px auto 15px;
+	// font-style: italic;
+	font-size:25px;
+	color: green;
+	font-weight: 700;
+}
+
+// #game-dialogue::before {
+// 	content: "Kenny \a0";
+// 	color: green;
+// 	font-weight: 700;
+// 	font-style: normal;
+// }
 
 // //Body
 
@@ -58,3 +83,83 @@ header h1 {
 	border: $border-style;
 }
 
+.gradient-text {
+	background-color: blue;
+	background-image:linear-gradient(45deg,  black, black, black, black,  black, black, black, black, red, green, teal, red, orange,black, blue, pink, black, black, black, black,  black, black, black, black, black, black, black, black,  black, red, orange,black, blue, red, green, teal, red, orange,black, blue, pink);
+	background-size: 100%;
+	
+	-webkit-background-clip: text;
+	-webkit-text-fill-color:transparent;
+
+	animation: rainbow-text-simple-animation-rev 0.35s ease forwards;
+}
+
+.gradient-text:hover{
+	animation: rainbow-text-simple-animation 0.2s ease-in forwards;
+}
+
+@keyframes rainbow-text-simple-animation-rev {
+	0% {
+			background-size: 650%;
+	}
+	40% {
+			background-size: 650%;
+	}
+	100% {
+			background-size: 100%;
+	}
+}
+
+/* Move the background and make it larger. */
+/* Animation shown when hovering over the text. */
+@keyframes rainbow-text-simple-animation {
+	0% {
+			background-size: 100%;
+	}
+	80% {
+			background-size: 650%;
+	}
+	100% {
+			background-size: 650%;
+	}
+}
+
+
+/* THIS IS ANIMATED!!!!!!!!!!!!!!!!!!!!!!!!!!!! */
+
+/* It seems this can work with <span> WITHIN the <text> tags */
+.header-gradient {
+	background-color: blue;
+	background-image:linear-gradient(
+		45deg,  blue, red, teal, green, blue, red, lime, green, blue, red, orange, green, black, black, black, 
+	);
+	background-size: 800%;
+
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+
+	/* Animation...? */
+	animation: button-animation 0.45s 0.15s ease-out forwards;
+}
+
+.header-gradient:hover {
+	animation: button-animation-rev 0.65s ease-out forwards;
+}
+
+@keyframes button-animation {
+  0% {
+    background-position: top right;
+  }
+  100% {
+    background-position: top left;
+  }
+}
+
+@keyframes button-animation-rev {
+  0% {
+    background-position: top left;
+  }
+  100% {
+    background-position: top right;
+  }
+}
