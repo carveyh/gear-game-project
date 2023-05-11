@@ -209,6 +209,8 @@ class Game{
 	}
 
 	loadLevelReset(){
+		this.dialogueEl = document.querySelector('#game-dialogue');
+		this.dialogueEl.innerText = "";
 		document.querySelector('body').style.backgroundColor = "white";
 		this.gears = [];
 		this.currentGear = Game.NULL_GEAR;
@@ -245,26 +247,54 @@ class Game{
 
 		this.player = new Player({game: this});
 
-		this.levelOneText1 = [`Heyy!!!`, `Help!!!!`, `Forget the glowing yellow tile 0 heeeeelp!!`, `There must be something u can do...oh god`, `I'll tell you something good...I swear...pls...`];
-		this.levelOneText1approach = [];
-		this.levelOneText1leave = [];
-		this.levelOneText2 = [`Ohhh - oh thank god. I…I can’t talk right now. Just… No matter what you do…do not anger…The One...`];
-		this.levelOneText3 = [`Ohhh god not again-🤮`];
+		this.saved = false;
+		this.alreadySaved = false;
+
+		this.beforeHelpText = [
+			`Heyy!!!`, 
+			`Help!!!!`, 
+			`Forget the temptingly glowing yellow tile - heeeeelp!!!`, 
+			`🤢`,
+			`There must be something "u" can do...oh god`, 
+			`I'll tell you something good...I swear...pls...`];
+		this.afterHelpText = [
+			`Thank you... I need to be alone for a bit... 😵‍💫`
+		];
+		this.masochistText = [
+			`OH GOD WHY`
+		];
 
 		// this.kenny = new Player({game: this, color: 'darkgreen', pos: [241,342]});
 
 	}
 
 	checkFirstLevelEvents(){
-		this.levelTimer += 1;
-		// //wait x seconds after first page load
-		// //cycle thru levelOneText1 strings per (i..j) *Math.random() seconds
-			// //if player steps within stationary platform, "approach" text - cycle more frequently `there must be something u can do`
-			// //if player walks away without interacting, "leave" text
-			// //if player interacts and gear speed goes to 0, levelOneText2
-				// //if player speeds up again, levelOneText3
-
-
+		// this.dialogueEl = document.querySelector('#game-dialogue');
+		// if(this.gears[this.gears.length - 1].rotationVel === 0 && !this.alreadySaved){
+		console.log(`gear rotation vel : ${this.gears[this.gears.length - 1].rotationVel}`)
+		if(this.gears[this.gears.length - 1].rotationVel <= 0 && !this.saved){
+			this.saved = true;
+			// this.alreadySaved = true;
+		}
+		// if(this.gears[this.gears.length - 1].rotationVel > 1 && this.alreadySaved){
+		// 	this.saved = false;
+		// }
+		if(this.levelTimer > 100){
+			// if(!this.saved && !this.alreadySaved){
+			if(!this.saved){
+				let idx = Math.floor(this.levelTimer / 300) % this.beforeHelpText.length;
+				this.dialogueEl.innerText = this.beforeHelpText[idx];
+			}
+			// if(this.saved && this.alreadySaved){
+			if(this.saved){
+				this.dialogueEl.innerText = this.afterHelpText[0];
+			}
+		}
+	}
+	checkFourthLevelEvents(){
+		if(this.levelTimer > 300){
+			this.dialogueEl.innerText = "If only there was a way to get across the space...";
+		}
 	}
 
 	loadSecondLevel(){
@@ -672,15 +702,20 @@ class Game{
 		// }
 
 			// //Check level specific events
+			this.levelTimer++;
 			switch(this.levelNumber){
 				case 1:
 					this.checkFirstLevelEvents();
 					break;
 				case 3:
 					this.checkThirdLevelEvents();
-					console.log(`vel ${this.currentGear.rotationVel} velMax ${this.currentGear.rotationVelMax}`)
+					// console.log(`vel ${this.currentGear.rotationVel} velMax ${this.currentGear.rotationVelMax}`)
+					break;
+				case 4:
+					this.checkFourthLevelEvents();
 					break;
 			}
+			console.log(this.levelTimer)
 	}
 
 
