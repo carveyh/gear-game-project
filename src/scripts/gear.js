@@ -142,6 +142,9 @@ class Gear extends MovingObject{
 		// //Revert translation and rotation to canvas origin
 		ctx.restore();
 
+		// //LEVEL DESIGN HELPER
+		// this.displayCoords(ctx);
+
 	}
 
 	drawFloatText(ctx){
