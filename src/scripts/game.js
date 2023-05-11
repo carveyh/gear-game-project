@@ -35,8 +35,9 @@ class Game{
 		this.levelNumber = 1;
 		this.levelOver = false;
 		this.transitionCountDown = 255;
+		this.levelTimer = 0; //for timing story events per level
 		
-		
+
 		this.loadFirstLevel();
 		// this.loadSecondLevel();
 		
@@ -236,13 +237,32 @@ class Game{
 			pos:[240,340],
 			vertices:[],
 			rotationVel:5,
-			timeBufferThreshold:150
+			timeBufferThreshold:70
 		});
 
 		this.player = new Player({game: this});
 		this.isPaused = false;
 
+		this.levelTimer = 0;
+		this.levelOneText1 = [`Heyy!!!`, `Help!!!!`, `Forget the glowing yellow tile 0 heeeeelp!!`, `There must be something u can do...oh god`, `I'll tell you something good...I swear...pls...`];
+		this.levelOneText1approach = [];
+		this.levelOneText1leave = [];
+		this.levelOneText2 = [`Ohhh - oh thank god. I…I can’t talk right now. Just… No matter what you do…do not anger…The One...`];
+		this.levelOneText3 = [`Ohhh god not again-🤮`];
+
 		// this.kenny = new Player({game: this, color: 'darkgreen', pos: [241,342]});
+
+	}
+
+	checkFirstLevelEvents(){
+		this.levelTimer += 1;
+		// //wait x seconds after first page load
+		// //cycle thru levelOneText1 strings per (i..j) *Math.random() seconds
+			// //if player steps within stationary platform, "approach" text - cycle more frequently `there must be something u can do`
+			// //if player walks away without interacting, "leave" text
+			// //if player interacts and gear speed goes to 0, levelOneText2
+				// //if player speeds up again, levelOneText3
+
 
 	}
 
@@ -533,6 +553,15 @@ class Game{
 			// this.levelTransitionOut();
 			// this.pause();
 		// }
+
+			// //Check level specific events
+			switch(this.levelNumber){
+				case 1:
+					this.checkFirstLevelEvents();
+					break;
+				case2:
+					break;
+			}
 	}
 
 
