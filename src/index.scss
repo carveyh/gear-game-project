@@ -48,3 +48,23 @@ header h1 {
 	flex-direction: row;
 	justify-content: space-around;
 }
+
+// #spoilers-marker {
+	
+// }
+
+#spoilers-container {
+	display: flex;
+	flex-direction: column;
+}
+
+#spoilers {
+	display: none;
+}
+
+#spoilers-marker:hover + #spoilers {
+	display: inline;
+	position: absolute;
+	right: 500px;
+	color: red;
+}

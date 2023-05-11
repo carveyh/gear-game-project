@@ -36,7 +36,13 @@ class GearPlatform extends MovingObject{
 	// }
 
 	isObjInBounds(obj){
+		console.log(`platform's pos${this.pos}`)
+		console.log(`players's pos${this.game.player.pos}`)
+
 		if(obj instanceof Player){
+			if(obj.pos === this.pos){
+				return true;
+			}
 			// //Find coordinates of platform with its position as origin
 			let overallDegrees = ((this.gear.currentAngle + this.angle + 270) % 360);
 			let overallRadians = Util.radians(overallDegrees);
@@ -62,10 +68,10 @@ class GearPlatform extends MovingObject{
 			// THIS ACTUALLY CHECKS IF PLAYER IS ON
 			// let platformToPlatformJumpBuffer = 5;
 			let platformToPlatformJumpBuffer = 0;
-			console.log(`platform angle: ${this.angle}`)
-			console.log(`platform width: ${this.width}`)
-			console.log(`platform depth: ${this.radius}`)
-			console.log(`playerPosRelativeToPlat: ${playerPosRelativeToPlat}`);
+			// console.log(`platform angle: ${this.angle}`)
+			// console.log(`platform width: ${this.width}`)
+			// console.log(`platform depth: ${this.radius}`)
+			// console.log(`playerPosRelativeToPlat: ${playerPosRelativeToPlat}`);
 			if(((playerPosRelativeToPlat[0] < this.width / 2) && (playerPosRelativeToPlat[0] > this.width / -2))
 				&& ((playerPosRelativeToPlat[1] < this.radius + platformToPlatformJumpBuffer) && (playerPosRelativeToPlat[1] > 0)))
 			{
