@@ -142,6 +142,9 @@ class Game{
 	}
 
 	addStationaryGear(options){
+		if(options){
+			options.color ||= `#0e1a24`;
+		}
 		let newPos;
 		let newRadius;
 		let newCounterClockWise;
@@ -163,6 +166,8 @@ class Game{
 		}
 
 		let gear = new StationaryGear({
+			winningTile: options.winningTile,
+			color: options.color,
 			pos: newPos,
 			radius: newRadius,
 			counterClockwise: newCounterClockWise,
@@ -203,7 +208,7 @@ class Game{
 		this.addGear();
 		this.addGear();
 		this.addGear();
-		this.addStationaryGear();
+		this.addStationaryGear({winningTile: true});
 		
 		
 		// Player class
@@ -220,7 +225,7 @@ class Game{
 		this.addCustomGear({vertices: [90, 180, 270]});
 		this.addCustomGear({vertices: [90, 270]});
 		this.addCustomGear({vertices: [90, 270]});
-		this.addStationaryGear();
+		this.addStationaryGear({winningTile: true, color: `orange`});
 		this.addStationaryGear({pos:[400,340]});
 		this.addCustomGear({
 			pos:[320,340],vertices: [0, 90, 180, 270],
@@ -264,7 +269,7 @@ class Game{
 	checkLevelOver(){
 		switch(this.levelNumber){
 			case 1:
-				if(this.player.pos[1] > Game.DIM_Y){
+				if(this.player.pos[1] < 145){
 					console.log("level over!")
 					this.levelTransitionOut();
 					this.levelNumber += 1;
@@ -272,6 +277,12 @@ class Game{
 				}
 				break;
 			case 2:
+				if(this.player.pos[1] < 145){
+					this.levelTransitionOut();
+					// this.levelNumber +=1;
+					this.loadSecondLevel();
+
+				}
 				break;
 		}
 		

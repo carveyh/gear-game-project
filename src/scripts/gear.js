@@ -144,7 +144,7 @@ class Gear extends MovingObject{
 		ctx.restore();
 
 		// //LEVEL DESIGN HELPER
-		// this.displayCoords(ctx);
+		this.displayCoords(ctx);
 
 	}
 
