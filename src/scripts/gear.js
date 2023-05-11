@@ -38,6 +38,9 @@ class Gear extends MovingObject{
 		this.gearEngaged = false;
 		this.gearEngagable = true;
 
+		this.blueCountdown = 255;
+		this.oldCanvasBorder = document.querySelector('#game-canvas').style.border;
+
 		this.generatePlatforms();
 	}
 
@@ -60,14 +63,39 @@ class Gear extends MovingObject{
 	}
 
 	toggleEngage(){
-		if(Util.distance(this.game.player.pos, this.pos) < this.platformWidth / 2){
+		// //Only activate if player is around the center, and check if this gear is current gear. Also gear must be "driveable" or is gearEngagable.
+		if(this.game.currentGear === this 
+			&& Util.distance(this.game.player.pos, this.pos) < this.platformWidth / 2
+			&& this.gearEngagable
+			){
 			this.gearEngaged = !this.gearEngaged;
 			if(this.gearEngaged){
-				// this.game.player.pos = this.pos;
+				this.game.player.pos = this.pos.slice(); //player should snap to gear center, not the other way around. Otherwise player can "pull" a gear a small distance and create clipping into other gears triggering collision detection and get stuck
 				this.pos = this.game.player.pos;
+				this.gearPlatforms.forEach(platform => {
+					platform.pos = this.game.player.pos;
+				})
+				this.fadePageToBlue();
 			} else {
+				this.blueCountdown = 255;
+				document.querySelector('body').style.backgroundColor = `rgb(255,255,255)`;
+				document.querySelector('#game-canvas').style.borderColor = `lightgray`;
+				document.querySelector('#spoilers').style.color = `white`;
 				this.pos = this.game.player.pos.slice();
+				this.gearPlatforms.forEach(platform => {
+					platform.pos = this.game.player.pos.slice();
+				})
 			}
+		}
+	}
+
+	fadePageToBlue(){
+		document.querySelector('body').style.backgroundColor = `rgb(${this.blueCountdown},${this.blueCountdown},255)`;
+		document.querySelector('#spoilers').style.color = `rgb(${this.blueCountdown},${this.blueCountdown},255)`;
+		document.querySelector('#game-canvas').style.borderColor = `rgb(${this.blueCountdown},${this.blueCountdown},255)`;
+		if(this.blueCountdown-- > 0) {
+			setTimeout(this.fadePageToBlue.bind(this), 1, this.blueCountdown)
+		} else {
 		}
 	}
 
@@ -149,7 +177,6 @@ class Gear extends MovingObject{
 	}
 
 	drawGearInnerRing(ctx){
-		console.log(this.game.currentGear === this)
 		if(this.game.currentGear === this){
 			// ctx.strokeStyle = `rgb(${Math.random() * 255},${Math.random() * 255}, ${Math.random() * 255})`;
 			ctx.strokeStyle = `rgb(255,255,0)`;
@@ -259,7 +286,6 @@ class Gear extends MovingObject{
 	}
 
 	checkCurrentPlatform(){
-		console.log(`check current platform: all platforms: ${this.gearPlatforms}`);
 		for(let i = 0; i < this.gearPlatforms.length; i++){
 			if(this.gearPlatforms[i].isObjInBounds(this.game.player)){
 				this.currentPlatform = this.gearPlatforms[i];
@@ -273,29 +299,27 @@ class Gear extends MovingObject{
 		// //WITH stutter step and smooth periodic stop.
 
 		this.timeBufferCurrent += this.timeBufferStep * timeDelta / 20;
+		
+		let rotationDirection = 1;
+		this.counterClockwise ? rotationDirection = -1 : rotationDirection = 1;
+		let finalAngleChange = this.rotationVel * rotationDirection * timeDelta;
 
 		// //NEED TO DRY - BLOCK WITH MINOR DIFF 1of2 PARTS
 		if((this.timeBufferCurrent % this.timeBufferThreshold) < this.timeBufferThreshold * .65){
-			let rotationDirection = 1;
-			this.counterClockwise ? rotationDirection = -1 : rotationDirection = 1;
-			let finalAngleChange = this.rotationVel * rotationDirection * timeDelta;
 			this.currentAngle = (this.currentAngle + finalAngleChange) % 360;
 
 			if(this.game.currentGear === this){
-			// if(this.isPlayerOn()){ //THIS IMPLEMENTATION WILL BUG - a player can be on multiple gears at the same time at connection points. This will ensure only the current gear rotates.
 				this.rotatePlayer(timeDelta, finalAngleChange);
 			}
 		}
 
 		// //NEED TO DRY - BLOCK WITH MINOR DIFF 2of2 PARTS
 		else if((this.timeBufferCurrent % this.timeBufferThreshold) < this.timeBufferThreshold * .75){
-		
-			let rotationDirection = 1;
-			this.counterClockwise ? rotationDirection = -1 : rotationDirection = 1;
-			let finalAngleChange = this.rotationVel * rotationDirection * timeDelta / 10;
+			finalAngleChange = this.rotationVel * rotationDirection * timeDelta / 10;
 			this.currentAngle = (this.currentAngle + finalAngleChange) % 360;
-			if(this.isPlayerOn()){
-				this.rotatePlayer(timeDelta, finalAngleChange);
+
+			if(this.game.currentGear === this){
+					this.rotatePlayer(timeDelta, finalAngleChange);
 			}
 		}
 	}

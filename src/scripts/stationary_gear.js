@@ -14,9 +14,10 @@ class StationaryGear extends Gear{
 	}
 
 	draw(ctx){
-		console.log(this.pos);
-		console.log(this.radius);
-		ctx.fillStyle = `rgb(255,0,255)`;
+		// console.log(this.pos);
+		// console.log(this.radius);
+		// ctx.fillStyle = `rgb(191, 100, 27)`;
+		ctx.fillStyle = `#0e1a24`;
 		ctx.fillRect(this.pos[0] - this.radius, this.pos[1] - this.radius, this.radius * 2, this.radius * 2);
 	}
 }

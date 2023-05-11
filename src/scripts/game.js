@@ -5,6 +5,7 @@ import NullGear from "./null_gear.js";
 import GearPlatform from "./gear_platform.js";
 import NullPlatform from "./null_platform.js";
 import StationaryGear from "./stationary_gear.js";
+import * as Util from "./util.js";
 
 class Game{
 
@@ -162,15 +163,18 @@ class Game{
 		this.gears.push(gear);
 	}
 
+	levelTransition(){
+		// Simple gradual color fill that fades out screen and fades it back in with new elements loaded.
+		
+	}
 
 	checkCollisions(){
-		console.log(`checking collisions`);
+		// console.log(`checking collisions`);
 
 		// Iterate all in-game elements and check collision
 		
 		// //Check if there is a current gear
 		this.checkCurrentGear(this.player);
-		console.log(`${this.currentGear}`)
 
 		if(this.currentGear){
 			this.currentGear.checkCurrentPlatform();
@@ -180,32 +184,42 @@ class Game{
 
 	// //This will also handle player OOB.
 	checkObjOOB(timeDelta){
-		// console.log(`current gear: ${this.currentGear.pos}`);
-		// console.log(`current platform: ${this.currentGear.gearPlatforms[1].angle}`);
+		if(!this.currentGear.gearEngaged){
+			// //If player is not "driving" a gear, check its walking in bounds
+			let onPlatform = this.currentGear.gearPlatforms.some(platform => {
+				return platform.isObjInBounds(this.player);
+			})
+			if(!onPlatform){
+				this.player.unMoveAndStop(timeDelta);
+			}
+		} else {
+			// //If player is "driving" a gear, check the gear being driven for collision with other world elements,
+			// //currently just other gears.
+			// //DO NOT CHECK COLLISION WITH ITSELF.
+			// //This will bug if player accidentally clipped into another gear's collision area already.
+			let drivenGearCollideWithOtherGears = this.gears.some(gear => {
+				let distance = Util.distance(this.currentGear.pos, gear.pos);
+				let separationNeeded = this.currentGear.radius + gear.radius;
+				// console.log(`distance ${distance} | separation needed ${separationNeeded}`)
+				return (gear !== this.currentGear) && (distance < separationNeeded);
+			})
+			// console.log(`${drivenGearCollideWithOtherGears}`);
+			if(drivenGearCollideWithOtherGears){
+				this.player.unMoveAndStop(timeDelta);
+			}
 
-		// //Check if a player moved onto a valid gear first:
-		// let onGear = this.gears.some(gear => {
-		// 	return gear.isPlayerOn();
-		// })
-		// if(!onGear){
-		// 	this.player.unMoveAndStop(timeDelta);
-
-		// }
-
-		// this.checkCurrentGear();
-
-		// //How about: we check if any player is on any of the gear platforms on the gear?
-		let onPlatform = this.currentGear.gearPlatforms.some(platform => {
-			return platform.isObjInBounds(this.player);
-		})
-		if(!onPlatform){
-			this.player.unMoveAndStop(timeDelta);
+			// //PLACEHOLDER: check collision with other stuff while in "driving mode"
+			// 
 		}
+		
 	}
 
 	// //Refactor to use this for any obj type
 	checkCurrentGear(obj){
 		if(obj instanceof Player){
+			if(this.currentGear.gearEngaged){
+				return;
+			}
 			let isOnAGear = false;
 
 			for(let i = 0; i < this.gears.length; i++){
@@ -306,10 +320,6 @@ class Game{
 		this.currentGear.gearDecel();
 	}
 
-	isOutOfBounds(pos){
-		// Check OOB.
-	}
-
 	// //Deprecating into (1) moveBackgroundObjects then (2) moveLiveObjects
 	// //Because the world spins no matter what, and living objects can then interact after world rules apply.
 	moveObjects(timeDelta){
@@ -321,12 +331,12 @@ class Game{
 
 	moveBackgroundObjects(timeDelta){
 		// Disable player movement first...and then restore it?
-		let tempPlayerVel = this.player.vel.slice();
-		this.player.vel = [0,0];
+		// let tempPlayerVel = this.player.vel.slice();
+		// this.player.vel = [0,0];
 		this.getAllBackgroundObjects().forEach(obj => {
 			obj.move(timeDelta);
 		})
-		this.player.vel = tempPlayerVel;
+		// this.player.vel = tempPlayerVel;
 	}
 
 	moveLiveObjects(timeDelta){
@@ -351,7 +361,7 @@ class Game{
 		this.checkCollisions();
 		this.moveLiveObjects(timeDelta);
 		// // checkCollisions() will update game.currentGear;
-		console.log(`checking collisions success after moving bg objects, and now trying after moving live objects`)
+		// console.log(`checking collisions success after moving bg objects, and now trying after moving live objects`)
 		this.checkCollisions();
 		this.checkObjOOB(timeDelta);
 
