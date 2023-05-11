@@ -80,7 +80,7 @@ class Gear extends MovingObject{
 				this.blueCountdown = 255;
 				document.querySelector('body').style.backgroundColor = `rgb(255,255,255)`;
 				document.querySelector('#game-canvas').style.borderColor = `lightgray`;
-				document.querySelector('#spoilers').style.color = `white`;
+				// document.querySelector('#spoilers').style.color = `white`;
 				this.pos = this.game.player.pos.slice();
 				this.gearPlatforms.forEach(platform => {
 					platform.pos = this.game.player.pos.slice();
@@ -91,7 +91,7 @@ class Gear extends MovingObject{
 
 	fadePageToBlue(){
 		document.querySelector('body').style.backgroundColor = `rgb(${this.blueCountdown},${this.blueCountdown},255)`;
-		document.querySelector('#spoilers').style.color = `rgb(${this.blueCountdown},${this.blueCountdown},255)`;
+		// document.querySelector('#spoilers').style.color = `rgb(${this.blueCountdown},${this.blueCountdown},255)`;
 		document.querySelector('#game-canvas').style.borderColor = `rgb(${this.blueCountdown},${this.blueCountdown},255)`;
 		if(this.blueCountdown-- > 0) {
 			setTimeout(this.fadePageToBlue.bind(this), 1, this.blueCountdown)

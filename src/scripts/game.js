@@ -25,39 +25,29 @@ class Game{
 		// Collection of generic in-game elements (for testing)
 		// this.gearPlatforms = []; //actually let each gear manage each platform...should not do this.
 		this.generics = [];
-		this.gears = [];
-
 		
-
-		this.currentGear = Game.NULL_GEAR;
-
-		// Add generic gears
-		this.addGear();
-		this.addGear();
-		this.addGear();
-		this.addGear();
-		this.addGear();
-		this.addStationaryGear();
-
-		this.loadFirstLevel();
-
-		// Player class
-		this.player = new Player({game: this});
-		this.isPaused = false;
-
-
+		
 		// Images
 		this.gearShiny = new Image();
 		this.gearShiny.src = './images/gear_shiny.png';
+		
+		// Level / Screen transition
+		this.levelNumber = 1;
+		this.levelOver = false;
+		this.transitionCountDown = 255;
+		
+		
+		this.loadFirstLevel();
+		
+		
+
 	}
 
 	static DIM_X = 960;
 	static DIM_Y = 600;
 	static BGCOLOR = "pink";
 
-	loadFirstLevel(){
-		
-	}
+
 
 	addGenericObj(){
 		this.generics.push(
@@ -163,9 +153,58 @@ class Game{
 		this.gears.push(gear);
 	}
 
-	levelTransition(){
-		// Simple gradual color fill that fades out screen and fades it back in with new elements loaded.
+	loadFirstLevel(){
+		this.gears = [];
+		this.currentGear = Game.NULL_GEAR;
+		// Add generic gears
+		this.addGear();
+		this.addGear();
+		this.addGear();
+		this.addGear();
+		this.addGear();
+		this.addStationaryGear();
 		
+		
+		// Player class
+		this.player = new Player({game: this});
+		this.isPaused = false;
+
+	}
+
+	levelTransitionOut(){
+		// Simple gradual color fill of canvas that fades out screen and fades it back in with new elements loaded.
+		let canvas = document.querySelector('#game-canvas');
+		let ctx = canvas.getContext('2d');
+		ctx.fillStyle = `rgb(${this.transitionCountDown},${this.transitionCountDown},255)`;
+		ctx.fillRect(0,0,Game.DIM_X,Game.DIM_Y);
+		console.log(this.transitionCountDown);
+		// document.querySelector('#spoilers').style.color = `rgb(${this.blueCountdown},${this.blueCountdown},255)`;
+		document.querySelector('#game-canvas').style.borderColor = `rgb(${this.transitionCountDown},${this.transitionCountDown},255)`;
+		if(this.transitionCountDown-- > 0) {
+			setTimeout(this.levelTransitionOut.bind(this), 1, this.transitionCountDown)
+		} else {
+			this.transitionCountDown = 255;
+		}
+	}
+
+	levelTransitionIn(){
+		// Add later.
+	}
+
+	checkLevelOver(){
+		if(this.player.pos[1] > Game.DIM_Y){
+			console.log("level over!")
+			this.levelTransitionOut();
+		}
+	}
+
+	// Async functions to help with showing a screen transition
+	sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+	}
+
+	async pause() {
+		await sleep(3000);
 	}
 
 	checkCollisions(){
@@ -350,25 +389,28 @@ class Game{
 	}
 
 	step(timeDelta){
-		// invokes moveObjects and checkCollisions
-
-		// //Step 1a: move background objs; Step 1b: checks collisions
-		this.moveBackgroundObjects(timeDelta);
-		// // checkCollisions() will update game.currentGear;
-		// this.checkCollisions();
-
-		// //Step 2a: move live objs; Step 2b: checks collisions
-		this.checkCollisions();
-		this.moveLiveObjects(timeDelta);
-		// // checkCollisions() will update game.currentGear;
-		// console.log(`checking collisions success after moving bg objects, and now trying after moving live objects`)
-		this.checkCollisions();
-		this.checkObjOOB(timeDelta);
-
-
-		// //
-		// this.moveObjects(timeDelta);
-		// this.checkCollisions();
+		if(!this.levelOver){
+			// invokes moveObjects and checkCollisions
+	
+			// //Step 1a: move background objs; Step 1b: checks collisions
+			this.moveBackgroundObjects(timeDelta);
+			// // checkCollisions() will update game.currentGear;
+			// this.checkCollisions();
+	
+			// //Step 2a: move live objs; Step 2b: checks collisions
+			this.checkCollisions();
+			this.moveLiveObjects(timeDelta);
+			// // checkCollisions() will update game.currentGear;
+			// console.log(`checking collisions success after moving bg objects, and now trying after moving live objects`)
+			this.checkCollisions();
+			this.checkObjOOB(timeDelta);
+	
+			// //Did the level end?
+			this.checkLevelOver();
+		} else {
+			this.levelTransitionOut();
+			this.pause();
+		}
 	}
 
 

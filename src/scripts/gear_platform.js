@@ -36,8 +36,8 @@ class GearPlatform extends MovingObject{
 	// }
 
 	isObjInBounds(obj){
-		console.log(`platform's pos${this.pos}`)
-		console.log(`players's pos${this.game.player.pos}`)
+		// console.log(`platform's pos${this.pos}`)
+		// console.log(`players's pos${this.game.player.pos}`)
 
 		if(obj instanceof Player){
 			if(obj.pos === this.pos){
